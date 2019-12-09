@@ -1,0 +1,18 @@
+.l-page{
+    display: grid;
+    grid-template-areas: "top top"
+                        "lateral content";
+
+    &__top{
+    grid-area: top;
+    }
+
+    &__lateral{
+    grid-area: lateral;
+    }
+
+    &__content{
+    grid-area: content;
+    }
+
+}
