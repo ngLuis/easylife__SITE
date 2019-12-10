@@ -1,0 +1,37 @@
+$paddingSizes : ("none": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" : 30, "xxl" : 50);
+
+@each $sizeName, $sizeValue in $paddingSizes {
+    .g-padding--bottom-#{$sizeName} {
+        padding-bottom: $sizeValue#{'px'};
+    }
+
+    .g-padding--top-#{$sizeName} {
+        padding-top: $sizeValue#{'px'};
+    }
+
+    .g-padding--right-#{$sizeName} {
+        padding-right: $sizeValue#{'%'};
+    }
+
+    .g-padding--left-#{$sizeName} {
+        padding-left: $sizeValue#{'%'};
+    }
+
+    .g-padding--vertical-#{$sizeName} {
+        padding-top: $sizeValue#{'px'};
+        padding-bottom: $sizeValue#{'px'};
+    }
+
+    .g-padding--horizontal-#{$sizeName} {
+        padding-left: $sizeValue#{'%'};
+        padding-right: $sizeValue#{'%'};
+    }
+
+    .g-padding--#{$sizeName} {
+        padding-top: $sizeValue#{'px'};
+        padding-bottom: $sizeValue#{'px'};
+        padding-left: $sizeValue#{'%'};
+        padding-right: $sizeValue#{'%'};
+    }
+
+}

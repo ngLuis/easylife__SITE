@@ -5,6 +5,8 @@
 @import './layouts/l-page';
 
 //Componentes
-@import './components/menu/menu';
+@import './components/menu/c-menu';
 @import './components/card/c-card';
 @import './components/seccion/c-seccion';
+    //globals
+@import './components/globals/padding/g-padding';
