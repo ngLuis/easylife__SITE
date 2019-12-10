@@ -366,6 +366,70 @@ table {
   .l-page__content {
     grid-area: content; }
 
+.l-columns {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); }
+  .l-columns--1-columns {
+    grid-template-columns: repeat(1, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-1-columns {
+      grid-template-columns: repeat(1, 1fr); } }
+  .l-columns--2-columns {
+    grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-2-columns {
+      grid-template-columns: repeat(2, 1fr); } }
+  .l-columns--3-columns {
+    grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-3-columns {
+      grid-template-columns: repeat(3, 1fr); } }
+  .l-columns--4-columns {
+    grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-4-columns {
+      grid-template-columns: repeat(4, 1fr); } }
+  .l-columns--5-columns {
+    grid-template-columns: repeat(5, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-5-columns {
+      grid-template-columns: repeat(5, 1fr); } }
+  .l-columns--6-columns {
+    grid-template-columns: repeat(6, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-6-columns {
+      grid-template-columns: repeat(6, 1fr); } }
+  .l-columns--7-columns {
+    grid-template-columns: repeat(7, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-7-columns {
+      grid-template-columns: repeat(7, 1fr); } }
+  .l-columns--8-columns {
+    grid-template-columns: repeat(8, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-8-columns {
+      grid-template-columns: repeat(8, 1fr); } }
+  .l-columns--9-columns {
+    grid-template-columns: repeat(9, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-9-columns {
+      grid-template-columns: repeat(9, 1fr); } }
+  .l-columns--10-columns {
+    grid-template-columns: repeat(10, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-10-columns {
+      grid-template-columns: repeat(10, 1fr); } }
+  .l-columns--11-columns {
+    grid-template-columns: repeat(11, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-11-columns {
+      grid-template-columns: repeat(11, 1fr); } }
+  .l-columns--12-columns {
+    grid-template-columns: repeat(12, 1fr); }
+  @media (max-width: 500px) {
+    .l-columns--movil-12-columns {
+      grid-template-columns: repeat(12, 1fr); } }
+
 .c-menu {
   display: flex;
   flex-direction: row; }
