@@ -1,0 +1,54 @@
+.c-card {
+    width: 300px;
+    box-shadow: 1px 1px 10px #888888;
+    margin: 0 50px;
+
+    &__img {
+       width: 200px;
+     
+    }
+    &__content {
+       /*  width: 250px; */
+    }
+    &__title {
+        font-size: 1.2em;
+        font-weight: bold;
+        font-family: sans-serif;
+        padding: 10px 0;
+        text-align: center;
+    }
+    &__text {
+        font-family: sans-serif;
+        padding: 10px 25px 40px 25px;
+        text-align: justify;
+
+    }
+    &__button { 
+        margin: 0 auto;
+        padding: 50px;
+    }
+    &__link {
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        width: 100%;
+        text-transform: uppercase;
+        font-family: sans-serif;
+        font-size: 1em;
+        font-weight: 600;
+        color: white;
+        padding: 20px 15px;
+        background-color: rgb(41, 70, 12);
+        border: 1px solid transparent;
+        border-radius: 20px;
+    }
+    &__link:hover {
+        background-color:  rgb(70, 116, 25);
+        border: 1px solid black;
+    }
+
+
+}
+.c-card:hover {
+    box-shadow: 3px 3px 10px 5px #888888;
+}

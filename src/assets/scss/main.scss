@@ -1,5 +1,10 @@
+//Base
 @import './base/reset';
 
+//Layouts
 @import './layouts/l-page';
 
-@import './components/menu';
+//Componentes
+@import './components/menu/menu';
+@import './components/card/c-card';
+@import './components/seccion/c-seccion';
