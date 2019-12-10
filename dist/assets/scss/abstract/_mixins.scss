@@ -1,0 +1,39 @@
+$paddingSizes : ("none": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" : 30, "xxl" : 50);
+
+@mixin crearPadding(){
+    @each $sizeName, $sizeValue in $paddingSizes {
+        &--padding-bottom-#{$sizeName} {
+            padding-bottom: $sizeValue#{'px'};
+        }
+    
+        &--padding-top-#{$sizeName} {
+            padding-top: $sizeValue#{'px'};
+        }
+    
+        &--padding-right-#{$sizeName} {
+            padding-right: $sizeValue#{'%'};
+        }
+    
+        &--padding-left-#{$sizeName} {
+            padding-left: $sizeValue#{'%'};
+        }
+    
+        &--padding-vertical-#{$sizeName} {
+            padding-top: $sizeValue#{'px'};
+            padding-bottom: $sizeValue#{'px'};
+        }
+    
+        &--padding-horizontal-#{$sizeName} {
+            padding-left: $sizeValue#{'%'};
+            padding-right: $sizeValue#{'%'};
+        }
+    
+        &--padding-#{$sizeName} {
+            padding-top: $sizeValue#{'px'};
+            padding-bottom: $sizeValue#{'px'};
+            padding-left: $sizeValue#{'%'};
+            padding-right: $sizeValue#{'%'};
+        }
+
+    }
+}

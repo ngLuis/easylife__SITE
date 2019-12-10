@@ -1,3 +1,6 @@
+// Abstracts
+@import './abstract/mixins';
+
 //Base
 @import './base/reset';
 
@@ -8,5 +11,5 @@
 @import './components/menu/c-menu';
 @import './components/card/c-card';
 @import './components/seccion/c-seccion';
-    //globals
-@import './components/globals/padding/g-padding';
+
+

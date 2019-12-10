@@ -1,4 +1,5 @@
 .c-menu{
+    @include crearPadding();
     display: flex;
     flex-direction: row;
 }
