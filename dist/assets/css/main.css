@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
 html {
   box-sizing: border-box; }
 
@@ -358,7 +360,8 @@ table {
 
 .l-page {
   display: grid;
-  grid-template-areas: "top top" "lateral content"; }
+  grid-template-areas: "lateral top" "lateral content";
+  grid-template-columns: .3fr 1.7fr; }
   .l-page__top {
     grid-area: top; }
   .l-page__lateral {
@@ -431,8 +434,9 @@ table {
       grid-template-columns: repeat(12, 1fr); } }
 
 .c-menu {
+  background-color: #F3F3F3;
   display: flex;
-  flex-direction: row; }
+  flex-flow: row; }
   .c-menu--padding-bottom-none {
     padding-bottom: 0px; }
   .c-menu--padding-top-none {
@@ -585,6 +589,27 @@ table {
     padding-bottom: 50px;
     padding-left: 50%;
     padding-right: 50%; }
+  .c-menu__option {
+    padding: 15px;
+    height: 100%;
+    color: #666666;
+    font-family: "Lato", sans-serif; }
+    .c-menu__option:hover {
+      background-color: #dddddd;
+      cursor: pointer; }
+    .c-menu__option--selected {
+      background-color: #008CBA;
+      color: white; }
+      .c-menu__option--selected:hover {
+        background-color: #008CBA; }
+    .c-menu__option--right {
+      margin-left: auto; }
+  .c-menu__icon {
+    margin-right: 5px; }
+
+.c-menu-lateral {
+  background-color: black;
+  height: 100vh; }
 
 .c-card {
   width: 300px;
@@ -631,3 +656,6 @@ table {
 .c-seccion {
   display: flex;
   justify-content: center; }
+
+.c-logo {
+  height: 15px; }

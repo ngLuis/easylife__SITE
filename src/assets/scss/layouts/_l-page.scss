@@ -1,7 +1,8 @@
 .l-page{
     display: grid;
-    grid-template-areas: "top top"
+    grid-template-areas: "lateral top"
                         "lateral content";
+    grid-template-columns: .3fr 1.7fr;
 
     &__top{
     grid-area: top;
