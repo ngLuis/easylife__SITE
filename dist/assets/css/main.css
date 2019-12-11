@@ -360,7 +360,7 @@ table {
 
 .l-page {
   display: grid;
-  grid-template-areas: "lateral top" "lateral content";
+  grid-template-areas: "top top" "lateral content";
   grid-template-columns: .3fr 1.7fr; }
   .l-page__top {
     grid-area: top; }
@@ -590,7 +590,7 @@ table {
     padding-left: 50%;
     padding-right: 50%; }
   .c-menu__option {
-    padding: 15px;
+    padding: 20px;
     height: 100%;
     color: #666666;
     font-family: "Lato", sans-serif; }
