@@ -3,8 +3,7 @@ function getImg() {
 
 
     $.ajax({
-        //url: "http://172.16.205.3/api/public/api/imagenesCarrusel",
-        url: "http://localhost/src/public/api/imagenesCarrusel",
+        url: "http://localhost/api/public/api/carrusel",
         type: "GET",
         dataType: "json",
         success: function (respuesta) {
@@ -12,11 +11,7 @@ function getImg() {
             var numsliders = $(".carousel-indicators");
             var contador = 1;
 
-            /*  var respuesta2 = JSON.parse(respuesta);
-             console.log(respuesta2);
-             console.log(respuesta2.data); */
-            $.each(respuesta[0].data, function (index, e) {
-                // console.log(respuesta);
+            $.each(respuesta.data, function (index, e) {
                 if (index == 0) {
                     numsliders.append("<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"0\" class=\"active\"></li>");
                     carrouselfather.append("<div class=\"carousel-item active\">" +

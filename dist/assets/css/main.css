@@ -360,14 +360,16 @@ table {
 
 .l-page {
   display: grid;
-  grid-template-areas: "top top" "lateral content";
+  grid-template-areas: "top top" "right left" "footer footer";
   grid-template-columns: .3fr 1.7fr; }
   .l-page__top {
     grid-area: top; }
-  .l-page__lateral {
-    grid-area: lateral; }
-  .l-page__content {
-    grid-area: content; }
+  .l-page__right {
+    grid-area: right; }
+  .l-page__left {
+    grid-area: left; }
+  .l-page__footer {
+    grid-area: footer; }
 
 .l-columns {
   display: grid;
@@ -609,7 +611,7 @@ table {
 
 .c-menu-lateral {
   background-color: black;
-  height: 100vh; }
+  height: 100%; }
 
 .c-card {
   width: 300px;

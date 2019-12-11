@@ -1,19 +1,24 @@
 .l-page{
     display: grid;
     grid-template-areas: "top top"
-                        "lateral content";
+                        "right left"
+                        "footer footer";
     grid-template-columns: .3fr 1.7fr;
 
     &__top{
     grid-area: top;
     }
 
-    &__lateral{
-    grid-area: lateral;
+    &__right{
+    grid-area: right;
     }
 
-    &__content{
-    grid-area: content;
+    &__left{
+    grid-area: left;
+    }
+
+    &__footer{
+        grid-area: footer;
     }
 
 }
