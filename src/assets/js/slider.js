@@ -3,6 +3,7 @@ function getImg() {
 
 
     $.ajax({
+
         url: "http://localhost/api/public/api/carrusel",
         type: "GET",
         dataType: "json",
@@ -11,7 +12,10 @@ function getImg() {
             var numsliders = $(".carousel-indicators");
             var contador = 1;
 
+
+
             $.each(respuesta.data, function (index, e) {
+
                 if (index == 0) {
                     numsliders.append("<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"0\" class=\"active\"></li>");
                     carrouselfather.append("<div class=\"carousel-item active\">" +
