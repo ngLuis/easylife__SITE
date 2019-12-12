@@ -1,5 +1,15 @@
 .c-seccion {
+    @include crearPadding();
+
     display: flex;
     justify-content: center;
+
+    &--dark {
+
+    }
+
+    &--light {
+        
+    }
     
 }

@@ -658,6 +658,158 @@ table {
 .c-seccion {
   display: flex;
   justify-content: center; }
+  .c-seccion--padding-bottom-none {
+    padding-bottom: 0px; }
+  .c-seccion--padding-top-none {
+    padding-top: 0px; }
+  .c-seccion--padding-right-none {
+    padding-right: 0%; }
+  .c-seccion--padding-left-none {
+    padding-left: 0%; }
+  .c-seccion--padding-vertical-none {
+    padding-top: 0px;
+    padding-bottom: 0px; }
+  .c-seccion--padding-horizontal-none {
+    padding-left: 0%;
+    padding-right: 0%; }
+  .c-seccion--padding-none {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0%;
+    padding-right: 0%; }
+  .c-seccion--padding-bottom-xss {
+    padding-bottom: 2px; }
+  .c-seccion--padding-top-xss {
+    padding-top: 2px; }
+  .c-seccion--padding-right-xss {
+    padding-right: 2%; }
+  .c-seccion--padding-left-xss {
+    padding-left: 2%; }
+  .c-seccion--padding-vertical-xss {
+    padding-top: 2px;
+    padding-bottom: 2px; }
+  .c-seccion--padding-horizontal-xss {
+    padding-left: 2%;
+    padding-right: 2%; }
+  .c-seccion--padding-xss {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2%;
+    padding-right: 2%; }
+  .c-seccion--padding-bottom-xs {
+    padding-bottom: 5px; }
+  .c-seccion--padding-top-xs {
+    padding-top: 5px; }
+  .c-seccion--padding-right-xs {
+    padding-right: 5%; }
+  .c-seccion--padding-left-xs {
+    padding-left: 5%; }
+  .c-seccion--padding-vertical-xs {
+    padding-top: 5px;
+    padding-bottom: 5px; }
+  .c-seccion--padding-horizontal-xs {
+    padding-left: 5%;
+    padding-right: 5%; }
+  .c-seccion--padding-xs {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5%;
+    padding-right: 5%; }
+  .c-seccion--padding-bottom-s {
+    padding-bottom: 10px; }
+  .c-seccion--padding-top-s {
+    padding-top: 10px; }
+  .c-seccion--padding-right-s {
+    padding-right: 10%; }
+  .c-seccion--padding-left-s {
+    padding-left: 10%; }
+  .c-seccion--padding-vertical-s {
+    padding-top: 10px;
+    padding-bottom: 10px; }
+  .c-seccion--padding-horizontal-s {
+    padding-left: 10%;
+    padding-right: 10%; }
+  .c-seccion--padding-s {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10%;
+    padding-right: 10%; }
+  .c-seccion--padding-bottom-m {
+    padding-bottom: 15px; }
+  .c-seccion--padding-top-m {
+    padding-top: 15px; }
+  .c-seccion--padding-right-m {
+    padding-right: 15%; }
+  .c-seccion--padding-left-m {
+    padding-left: 15%; }
+  .c-seccion--padding-vertical-m {
+    padding-top: 15px;
+    padding-bottom: 15px; }
+  .c-seccion--padding-horizontal-m {
+    padding-left: 15%;
+    padding-right: 15%; }
+  .c-seccion--padding-m {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15%;
+    padding-right: 15%; }
+  .c-seccion--padding-bottom-l {
+    padding-bottom: 20px; }
+  .c-seccion--padding-top-l {
+    padding-top: 20px; }
+  .c-seccion--padding-right-l {
+    padding-right: 20%; }
+  .c-seccion--padding-left-l {
+    padding-left: 20%; }
+  .c-seccion--padding-vertical-l {
+    padding-top: 20px;
+    padding-bottom: 20px; }
+  .c-seccion--padding-horizontal-l {
+    padding-left: 20%;
+    padding-right: 20%; }
+  .c-seccion--padding-l {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20%;
+    padding-right: 20%; }
+  .c-seccion--padding-bottom-xl {
+    padding-bottom: 30px; }
+  .c-seccion--padding-top-xl {
+    padding-top: 30px; }
+  .c-seccion--padding-right-xl {
+    padding-right: 30%; }
+  .c-seccion--padding-left-xl {
+    padding-left: 30%; }
+  .c-seccion--padding-vertical-xl {
+    padding-top: 30px;
+    padding-bottom: 30px; }
+  .c-seccion--padding-horizontal-xl {
+    padding-left: 30%;
+    padding-right: 30%; }
+  .c-seccion--padding-xl {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-left: 30%;
+    padding-right: 30%; }
+  .c-seccion--padding-bottom-xxl {
+    padding-bottom: 50px; }
+  .c-seccion--padding-top-xxl {
+    padding-top: 50px; }
+  .c-seccion--padding-right-xxl {
+    padding-right: 50%; }
+  .c-seccion--padding-left-xxl {
+    padding-left: 50%; }
+  .c-seccion--padding-vertical-xxl {
+    padding-top: 50px;
+    padding-bottom: 50px; }
+  .c-seccion--padding-horizontal-xxl {
+    padding-left: 50%;
+    padding-right: 50%; }
+  .c-seccion--padding-xxl {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 50%;
+    padding-right: 50%; }
 
 .c-logo {
   height: 15px; }
