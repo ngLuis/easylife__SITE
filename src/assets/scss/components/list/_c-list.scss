@@ -1,0 +1,15 @@
+.c-list{
+    font-family: $font;
+    padding: 30px;
+    &--border-right{
+        border-right: 1px solid black;
+    }
+    &__title{
+        font-size: 15px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    &__option{
+        line-height: 25px;
+    }
+}
