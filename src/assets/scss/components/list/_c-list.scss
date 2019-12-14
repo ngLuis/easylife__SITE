@@ -4,8 +4,11 @@
     &--border-right{
         border-right: 1px solid black;
     }
+    &--margin-top{
+        margin-top: 25px;
+    }
     &__title{
-        font-size: 15px;
+        font-size: 25px;
         font-weight: bold;
         margin-bottom: 5px;
     }
