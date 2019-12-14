@@ -1,11 +1,17 @@
-.c-seccion {
+.c-section {
     @include crearPadding();
 
-    display: flex;
-    justify-content: center;
+    font-family: $font;
+
+    &__title {
+        font-size: 45px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 45px;
+    }
 
     &--dark {
-
+        background-color: black;
     }
 
     &--light {

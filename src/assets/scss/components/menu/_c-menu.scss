@@ -8,9 +8,10 @@
     &__option {
         padding: 20px;
         height: 100%;
-        color: #666666;
+        color: #666666 !important;
         font-family: $font;
-
+        user-select: none;
+        
         &:hover {
             background-color: #dddddd;
             cursor: pointer;
@@ -18,10 +19,10 @@
 
         &--selected {
             background-color: #008CBA;
-            color: white;
+            color: white !important;
 
             &:hover {
-                background-color: #008CBA;
+                background-color: lighten(#008CBA, 10%);
             }
         }
 
