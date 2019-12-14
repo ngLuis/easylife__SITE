@@ -1,25 +1,25 @@
 .l-page{
     display: grid;
-    grid-template-areas: "top top"
-                        "right left"
-                        "footer footer";
+    grid-template-areas: 
+        "top top"
+        "left right"
+        "footer footer";
 
     grid-template-columns: .3fr 1.7fr;
 
     &__top{
-    grid-area: top;
+        grid-area: top;
     }
 
     &__right{
-    grid-area: right;
+        grid-area: right;
     }
 
     &__left{
-    grid-area: left;
+        grid-area: left;
     }
 
     &__footer{
         grid-area: footer;
     }
-
 }
