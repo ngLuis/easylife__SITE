@@ -1,22 +1,38 @@
-let categorias;
+import { informacion, volver } from '../scss/components/asistente/animation.js';
 
-$baseURL = "http://localhost/api/public/api/";
+let categorias;
+let imagenesCarrusel;
+
+const $baseURL = "http://localhost/api/public/api/";
+
+let peticionCategorias = $.ajax({
+                                    url : $baseURL + 'categoria',
+                                    method : 'GET',
+                                    dataType: 'json'
+                                });
+
+let peticionCarrusel = $.ajax({
+                                    url: $baseURL + 'carrusel',
+                                    type: "GET",
+                                    dataType: "json"
+                                });
 
 $(function(){
-    $.ajax({
-        url : $baseURL + 'categoria',
-        method : 'GET',
-        dataType: 'json'
-    })
-    .done(function(respuesta){
-        categorias = respuesta;
-
+    $.when( peticionCategorias, peticionCarrusel )
+    .done(function(respuestaCategoria, respuestaCarrusel){        
+        categorias = respuestaCategoria[0];
+        imagenesCarrusel = respuestaCarrusel[0];
+        
         cargarCartas();
+        pintarItemsSidebar();
+        getImgCarrusel();
+
+        informacion();
+        volver();
     });
 })
 
 function cargarCartas() {
-
 
     $.each(categorias.data, function(index, element){
 
@@ -36,7 +52,7 @@ function cargarCartas() {
         let linkBoton = $('<a>').addClass('c-card__link').append('Leer Más');
         cardBoton.append(linkBoton);
         
-        setListenerBoton(cardBoton);
+        setListenerCartasBoton(cardBoton);
 
         componenteCard.append(cardImg);
         componenteCard.append(cardContenido);
@@ -47,9 +63,62 @@ function cargarCartas() {
 
     })
 
-    function setListenerBoton(cardBoton) {
-        cardBoton.on('click', function(){
-            alert('En un sprint futuro podrás ver más indormación de: ' + $(this).attr('id'));
+}
+
+function setListenerCartasBoton(cardBoton) {
+    cardBoton.on('click', function(){
+        alert('En un sprint futuro podrás ver más indormación de: ' + $(this).attr('id'));
+    });
+}
+
+function pintarItemsSidebar() {
+
+    $.each(categorias.data, function (index, categoria) {
+        // Creamos elemento del menú
+        let item = $('<div/>', {
+            "class": "c-sidebar__item",
+            "id": "cat-" + categoria.id,
+            "text": categoria.nombre
         });
-    }
+        // Lo añadimos
+        $("#c-sidebar").append(item);
+    })
+
+    setListenersItemsSidebar();
+}
+
+function setListenersItemsSidebar() {
+    // Listener en el menú que afectará a todos los items (habidos y nuevos)
+    $("#c-sidebar").on("click", ".c-sidebar__item", function () {
+        alert("En el siguiente sprint verás la categoría " + $(this)[0].id);
+    })
+}
+
+function getImgCarrusel() {
+
+    var carrouselfather = $(".carousel-inner");
+    var numsliders = $(".carousel-indicators");
+    var contador = 1;
+
+
+
+    $.each(imagenesCarrusel.data, function (index, elementoCarrusel) {
+
+        if (index == 0) {
+            numsliders.append("<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"0\" class=\"active\"></li>");
+            carrouselfather.append("<div class=\"carousel-item active\">" +
+                "<img src='assets/img/" + elementoCarrusel.imagen + "' class=\"d-block w-100\">" +
+                "<div class=\"carousel-caption d-none d-md-block\">" + "<h5>" + elementoCarrusel.titulo + "</h5>" + "<p>" + elementoCarrusel.descripcion + "</p>" + " </div>" + "</div>"
+            );
+
+        } else {
+            numsliders.append("<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"" + contador + "\"></li>");
+            carrouselfather.append("<div class=\"carousel-item\">" +
+                "<img src='assets/img/" + elementoCarrusel.imagen + "' class=\"d-block w-100\">" +
+                "<div class=\"carousel-caption d-none d-md-block\">" + " <h5>" + elementoCarrusel.titulo + "</h5> " + "<p>" + elementoCarrusel.descripcion + "</p>" + " </div>" + "</div>"
+            );
+            contador = contador + 1;
+        }
+    })
+
 }
