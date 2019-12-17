@@ -23,12 +23,25 @@ $(function () {
             categorias = respuestaCategoria[0];
             imagenesCarrusel = respuestaCarrusel[0];
 
-            cargarCartas();
-            pintarItemsSidebar();
-            getImgCarrusel();
+            if (categorias.status >= 200 && categorias.status <= 299) {
+                cargarCartas();
+                pintarItemsSidebar();
+            } else {
+                mostrarErrorDatos(categorias);
+            }
+
+            if (imagenesCarrusel.status >= 200 && imagenesCarrusel.status <= 299) {
+                getImgCarrusel();
+            } else {
+                mostrarErrorDatos(imagenesCarrusel);
+            }
 
             informacion();
             volver();
+        })
+        .fail(function (xhr) {
+            console.log("ERROR del servidor: " + xhr.status + "(" + xhr.statusText + ")");
+            console.log("Más información: ", xhr);
         });
 })
 
@@ -92,6 +105,11 @@ function setListenersItemsSidebar() {
     $("#c-sidebar").on("click", ".c-sidebar__item", function () {
         alert("En el siguiente sprint verás la categoría " + $(this)[0].id);
     })
+}
+
+function mostrarErrorDatos(json) {
+    console.log("ERROR al obtener los datos: " + json.status + "(" + json.code + "). Revisar si hay datos en la BBDD");
+    console.log("Más información: ", json);
 }
 
 function getImgCarrusel() {
