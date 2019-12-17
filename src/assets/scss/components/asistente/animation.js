@@ -14,8 +14,7 @@ function volver() {
     $(".c-asistente__cerrar").on("click", function () {
         $(".c-asistente").removeClass("c-asistente--mostrar");
 
-        /*         setTimeout(informacion
-                    , 150000); */
+
     })
 }
 

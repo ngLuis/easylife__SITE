@@ -1,5 +1,5 @@
 .c-sidebar {
-    background-color: $sidebar-background;
+    background-color: $menu-color;
     color: $sidebar-color;
     height: 100%; //REVIEW no hace nada por como está ahora mismo el grid de l-page. Revisar cuando suban sus cambios.
 
@@ -7,12 +7,16 @@
         width: 100%;
         line-height: 50px;
         padding-left: 30px;
-
-        text-transform: capitalize;
+        color: $texto;
 
         &:hover {
             cursor: pointer;
-            background-color: darken($sidebar-background, 10%);
+            background-color: $texto-hover;
         }       
+    }
+
+    &__header {
+        
+        margin-left: 15px;
     }
 }

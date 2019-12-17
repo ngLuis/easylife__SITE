@@ -6,41 +6,41 @@ let imagenesCarrusel;
 const $baseURL = "http://localhost/api/public/api/";
 
 let peticionCategorias = $.ajax({
-                                    url : $baseURL + 'categoria',
-                                    method : 'GET',
-                                    dataType: 'json'
-                                });
+    url: $baseURL + 'categoria',
+    method: 'GET',
+    dataType: 'json'
+});
 
 let peticionCarrusel = $.ajax({
-                                    url: $baseURL + 'carrusel',
-                                    type: "GET",
-                                    dataType: "json"
-                                });
+    url: $baseURL + 'carrusel',
+    type: "GET",
+    dataType: "json"
+});
 
-$(function(){
-    $.when( peticionCategorias, peticionCarrusel )
-    .done(function(respuestaCategoria, respuestaCarrusel){        
-        categorias = respuestaCategoria[0];
-        imagenesCarrusel = respuestaCarrusel[0];
-        
-        cargarCartas();
-        pintarItemsSidebar();
-        getImgCarrusel();
+$(function () {
+    $.when(peticionCategorias, peticionCarrusel)
+        .done(function (respuestaCategoria, respuestaCarrusel) {
+            categorias = respuestaCategoria[0];
+            imagenesCarrusel = respuestaCarrusel[0];
 
-        informacion();
-        volver();
-    });
+            cargarCartas();
+            pintarItemsSidebar();
+            getImgCarrusel();
+
+            informacion();
+            volver();
+        });
 })
 
 function cargarCartas() {
 
-    $.each(categorias.data, function(index, element){
+    $.each(categorias.data, function (index, element) {
 
         let areaColumna = $('<div>').addClass('l-columns__area');
 
         let componenteCard = $('<div>').addClass('c-card');
 
-        let cardImg = $('<img>').attr('src', './assets/img/cartas/'+element.imagen).addClass('c-card__img');
+        let cardImg = $('<img>').attr('src', './assets/img/cartas/' + element.imagen).addClass('c-card__img');
 
         let cardContenido = $('<div>').addClass('c-card__content');
         let cardTitulo = $('<h2>').addClass('c-card__title').append(element.nombre);
@@ -48,10 +48,10 @@ function cargarCartas() {
         cardContenido.append(cardTitulo);
         cardContenido.append(cardDescripcion);
 
-        let cardBoton = $('<div>').addClass('c-card__button').attr('id', 'cat-'+element.id);
+        let cardBoton = $('<div>').addClass('c-card__button').attr('id', 'cat-' + element.id);
         let linkBoton = $('<a>').addClass('c-card__link').append('Leer Más');
         cardBoton.append(linkBoton);
-        
+
         setListenerCartasBoton(cardBoton);
 
         componenteCard.append(cardImg);
@@ -66,8 +66,8 @@ function cargarCartas() {
 }
 
 function setListenerCartasBoton(cardBoton) {
-    cardBoton.on('click', function(){
-        alert('En un sprint futuro podrás ver más indormación de: ' + $(this).attr('id'));
+    cardBoton.on('click', function () {
+        alert('En un sprint futuro podrás ver más información de: ' + $(this).attr('id'));
     });
 }
 

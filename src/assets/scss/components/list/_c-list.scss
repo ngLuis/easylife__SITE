@@ -1,12 +1,12 @@
 .c-list{
     font-family: $font;
     padding: 30px;
+    color: darken($color-destacado, 30%);
     &--border-right{
-        border-right: 1px solid black;
-    }
+        border-right: 1px solid darken($color-destacado, 30%);  }
     &--margin-top{
         margin-top: 25px;
-    }
+    } 
     &__title{
         font-size: 25px;
         font-weight: bold;

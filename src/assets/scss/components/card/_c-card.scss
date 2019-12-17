@@ -44,13 +44,13 @@
         font-weight: 600;
         color: #ffffff !important;
         padding: 20px 15px;
-        background-color: #008CBA;
+        background-color: $color-destacado;
         border: 1px solid transparent;
         border-radius: 20px;
         user-select: none;
 
         &:hover {
-            background-color: lighten(#008CBA, 10%);
+            background-color: lighten( $color-destacado, 10%);
             cursor: pointer;
         }
     }
