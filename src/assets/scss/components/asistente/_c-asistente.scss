@@ -14,6 +14,7 @@
     border-radius: 5px;
     padding: 15px;
     text-align: center;
+    z-index: 100;
 
     &__imagen {
     border-radius: 10px;
@@ -50,6 +51,7 @@
 
     &__cerrar:hover{
         color:#740a16;
+        cursor: pointer;
     }
        &--mostrar {
     visibility: visible; 

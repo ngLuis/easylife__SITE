@@ -5,9 +5,9 @@
 
     &__item{
         width: 100%;
-        line-height: 50px;
-        padding-left: 30px;
+        padding: 20px 30px;
         color: $texto;
+        border-bottom: 1px solid $texto;
 
         &:hover {
             cursor: pointer;

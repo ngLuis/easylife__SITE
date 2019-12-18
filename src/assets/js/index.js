@@ -1,4 +1,5 @@
 import { informacion, volver } from '../scss/components/asistente/animation.js';
+import { menu } from '../scss/components/menu/c-menu.js';
 
 let categorias;
 let imagenesCarrusel;
@@ -36,6 +37,7 @@ $(function () {
                 mostrarErrorDatos(imagenesCarrusel);
             }
 
+            setListenersMenu();
             informacion();
             volver();
         })
@@ -139,4 +141,8 @@ function getImgCarrusel() {
         }
     })
 
+}
+
+function setListenersMenu() {
+    menu();
 }
