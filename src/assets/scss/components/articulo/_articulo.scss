@@ -1,0 +1,41 @@
+.articulo {
+    width: 300px;
+    height: 359px;
+    background-color: rgb(216, 216, 216);
+    color: $texto;
+    font-family: "Lato", sans-serif;
+    margin-bottom: 28px;
+
+    &__image {
+        width: 250px;
+        margin-top: 22px;
+        margin-left: 24px;
+    }
+
+    &__title {
+        margin-left: 24px;
+        margin-top: 10px;
+        height: 57px;
+        font-size: 21px;
+    }
+
+    &__price {
+        margin-right: 24px;
+        margin-top: 5px;
+        text-align: right;
+        margin-bottom: 43px;
+    }
+
+    &__button {
+        padding: 15px;
+        border-radius: 5px;
+        background-color: darken($color-destacado, 10%);
+        color: white !important;
+        margin-left: 152px;
+
+        &:hover {
+            background-color: $color-destacado;
+            cursor: pointer;
+        }
+    }
+}

@@ -105,8 +105,55 @@ function pintarItemsSidebar() {
 function setListenersItemsSidebar() {
     // Listener en el menú que afectará a todos los items (habidos y nuevos)
     $("#c-sidebar").on("click", ".c-sidebar__item", function () {
-        alert("En el siguiente sprint verás la categoría " + $(this)[0].id);
+        let idCategoria = this.id.split('-');
+        mostrarServicios(idCategoria[1]);
     })
+}
+
+function mostrarServicios(idCategoria) {
+    
+    $('#contenido').empty();
+    $.ajax({
+        url: $baseURL+'categoria/'+idCategoria+'/servicio/',
+        dataType: 'json',
+        type: 'GET',
+    }).done((response) => {
+        let lColumns = $('<div/>').addClass('l-columns');
+        let lColumnsArea = $('<div/>').addClass('l-columns__area');
+        let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-s');
+        let sectionContent = $('<div/>').addClass('c-section__content');
+        let lColumnsInsideSection = $('<div/>').addClass('l-columns l-columns--4-columns').attr('id', 'contenedor-articulos');
+        $.each(response.data, function(index, value){
+            let lColumnsInsideSectionArea = $('<div/>').addClass('l-columns__area');
+            let articulo = $('<div/>').addClass('articulo');
+            let articuloImg = $('<img/>').addClass('articulo__image').attr('src','./assets/img/img1.jpg');
+            let articuloTitulo = $('<h3/>').addClass('articulo__title').text(value.nombre);
+            let articuloPrecio = $('<h6/>').addClass('articulo__price').text(value.precio+'€');
+            let articuloBoton = $('<a/>').addClass('articulo__button').text('Ver en detalle');
+
+            articulo.append(articuloImg);
+            articulo.append(articuloTitulo);
+            articulo.append(articuloPrecio);
+            articulo.append(articuloBoton);
+            lColumnsInsideSectionArea.append(articulo);
+            lColumnsInsideSection.append(lColumnsInsideSectionArea);
+        });
+
+        sectionContent.append(lColumnsInsideSection);
+        section.append(sectionContent);
+        lColumnsArea.append(section);
+        lColumns.append(lColumnsArea)
+        $('#contenido').append(lColumns);
+        addListenersServicios();
+    }).fail((response) => {
+        $('#contenido').text('No se han encontrado servicios en esta categoría');
+    });
+}
+
+function addListenersServicios(){
+    $(".articulo").on("click", ".articulo__button", function(){
+        alert('Mostrar modal con la información');
+    });
 }
 
 function mostrarErrorDatos(json) {
