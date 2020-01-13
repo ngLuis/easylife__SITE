@@ -1,5 +1,6 @@
 import { informacion, volver } from '../scss/components/asistente/animation.js';
 import { menu } from '../scss/components/menu/c-menu.js';
+import { setListenersModal } from '../scss/components/modal/c-modal.js';
 
 let categorias;
 let imagenesCarrusel;
@@ -31,39 +32,21 @@ $(function () {
                     password: passwordData
                 }
             }).done(function (respuestaSesion) {
-                console.log("a pelo", respuestaSesion)
                 miToken = respuestaSesion['access_token'];
-                localStorage.setItem("miToken", miToken);
-                console.log("el token", miToken);
+                localStorage.setItem("access_token", miToken);
                 let name = respuestaSesion['user']['name'];
                 let image = respuestaSesion['user']['image'];
                 let modalForm = $("#modalLoginForm");
                 modalForm.modal("hide");
-                pintarMenuUser(miToken, name, image);
+                pintarMenuUser(name, image);
 
             }).fail(function () {
-                console.log("algohafallado")
+                console.log("algo ha fallado")
             })
 
         })
     })
 })
-
-
-
-
-
-/*     let peticionInicioSesion = $.ajax({
- 
-        url: $baseURL + 'auth/login',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            email: 'admin2@admin.com',
-            password: 'adminadmin'
-        }
- 
-    }) */
 
 let peticionCategorias = $.ajax({
     url: $baseURL + 'categoria',
@@ -80,7 +63,6 @@ let peticionCarrusel = $.ajax({
 $(function () {
     $.when(peticionCategorias, peticionCarrusel)
         .done(function (respuestaCategoria, respuestaCarrusel) {
-            console.log("hola")
             categorias = respuestaCategoria[0];
             imagenesCarrusel = respuestaCarrusel[0];
 
@@ -108,6 +90,8 @@ $(function () {
             }
 
             setListenersMenu();
+            setListenersModal();
+            setListenersModalElements();
         })
         .fail(function (xhr) {
             console.log("ERROR del servidor: " + xhr.status + "(" + xhr.statusText + ")");
@@ -187,7 +171,7 @@ function cargarCartasSection() {
 
 }
 
-function pintarMenuUser(miToken, name, image) {
+function pintarMenuUser(name, image) {
     /*    let btnRegister = $("#register"); */
     let modalAvatar = $("<a>"); // Contendrá el div que añadiremos al menu para la foto
     let divImgAvatar = $("<img>");
@@ -196,8 +180,6 @@ function pintarMenuUser(miToken, name, image) {
     modalAvatar.append(divImgAvatar);
     divImgAvatar.attr("src", "assets/img/" + image);
     divImgAvatar.addClass("c-menu__option--avatar");
-    console.log(divImgAvatar);
-    console.log(modalAvatar);
     let menu = $(".c-menu");
     menu.append(modalAvatar);
     btnLogin.html(name);
@@ -205,8 +187,6 @@ function pintarMenuUser(miToken, name, image) {
     btnLogin.removeAttr("data-target")
     btnRegister.html("Cerrar sesion");
     btnRegister.attr("id", "logout")
-
-    console.log(miToken)
     logoutSesion();
 
 
@@ -215,7 +195,7 @@ function pintarMenuUser(miToken, name, image) {
 
 function logoutSesion() {
     let btnLogout = $("#logout");
-    let miTokenStorage = localStorage.getItem("miToken");
+    let miTokenStorage = localStorage.getItem("access_token");
 
     btnLogout.on("click", function () {
         $.ajax({
@@ -226,15 +206,9 @@ function logoutSesion() {
             console.log(respuestaLogout);
             alert("Sesión cerrada correctamente");
             localStorage.clear();
-            // Intento 1
-
             var url = "http://localhost/site";
             $(location).attr('href', url);
-
-            /*    // Intento 2
-   
-               $(location).reload(); */
-
+            // cargarPaginaInicio();
         }).fail(function () {
             console.log("Algo ha fallado");
         })
@@ -413,16 +387,72 @@ function getImgCarrusel() {
 }
 
 function setListenersMenu() {
+    console.log('Entra en listeners menu');
     menu();
     setListenersButtonsMenu();
 }
 
 function setListenersButtonsMenu() {
     $('.c-menu').on('click', '.c-menu__option', function () {
+        console.log('El click funciona');
         let id = $(this).attr('id');
-
+        console.log('Esta es la id: '+id);
         if (id === 'menu-inicio') {
             cargarPaginaInicio();
+        } else if ( id === 'register' ) {
+            console.log('Entra dentro de menu-registro');
+            if ($('#register').text() === 'Regístrate'){
+                showModal('registro');
+            } else {
+                cambiarValoresMenu();
+            }
         }
     })
+}
+function showModal( modalName ) {
+    $('#'+modalName).addClass('c-modal--show');
+}
+
+function setListenersModalElements() {
+    $('#boton-registrar').on('click', registrarUsuario);
+}
+
+function registrarUsuario() {
+    const user = {
+        "name": $('#name-registro').val(),
+        "email": $('#email-registro').val(),
+        "password": $('#password-registro').val(),
+        "dni": $('#dni-registro').val(),
+        "type": "1",
+    }
+
+    $.ajax({
+        url: $baseURL+'auth/register',
+        type: 'POST',
+        dataType: 'json',
+        data: user
+    })
+    .done((response) => {
+        console.log(response);
+        localStorage.setItem('access_token', response.access_token);
+        $(this).parent().parent().parent().removeClass('c-modal--show');
+        let image = 'asdsad';
+        pintarMenuUser(user.name, image);
+    })
+    .fail((response) => {
+        console.log(response);
+        if ( response.responseJSON.code === 403 ) {
+            alert('Alguno de los datos no están bien introducidos');
+        }
+    });
+}
+
+function cambiarValoresMenu() {
+    if ( $('#register').text() === 'Regístrate' && $('#menu-inicio-sesion').text() === 'Inicia Sesión' ) {
+        $('#menu-inicio-sesion').text('Nombre de usuario');
+        $('#register').text('Cerrar Sesión');
+    } else {
+        $('#menu-inicio-sesion').text('Inicia Sesión');
+        $('#register').text('Regístrate');
+    }
 }

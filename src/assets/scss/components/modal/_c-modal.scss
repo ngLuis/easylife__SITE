@@ -1,0 +1,96 @@
+.c-modal {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    z-index: 300;
+    top: 0px;
+    color: $texto;
+    font-family: $font;
+
+    &--show {
+        display: block;
+    }
+
+    &__background {
+        width: 100%;
+        height: 100%;
+        z-index: 301;
+        background-color: $sidebar-background;
+        opacity: 0.7;
+        animation-name: modalAparece;
+        animation-duration: 2s;
+        cursor: pointer;
+    }
+
+    &__window {
+        position: fixed;
+        top: 20%;
+        left: 35%;
+        width: 600px;
+        background-color: $footer;
+        border: 1px solid darken($footer, 25%);
+        opacity: 1;
+        animation-name: windowAparece;
+        animation-duration: 2s;
+        z-index: 302;
+        border-radius: 15px;
+    }
+
+    &__header {
+        padding: 15px;
+        border-bottom: 1px solid darken($footer, 25%);
+    }
+
+    &__content {
+        padding: 15px;
+    }
+
+    &__footer {
+        padding: 15px;
+        border-top: 1px solid darken($footer, 25%);
+        text-align: right;
+    }
+
+    &__title {
+        font-size: 23px;
+        font-weight: bold;
+    }
+
+    &__text-field {
+        width: 75%;
+        height: 45px;
+        font-size: 23px;
+        margin-bottom: 20px;
+        color: $texto !important;
+        outline: none;
+        margin-left: 15px;
+
+        &::placeholder {
+            padding: 5px;
+        }
+    }
+
+    &__button {
+        padding: 15px;
+        color: white !important;
+        background-color: $color-destacado;
+        border-radius: 5px;
+        display: inline-block;
+
+        &:hover {
+            background-color: darken($color-destacado, 10%);
+            cursor: pointer;
+        }
+    }
+}
+
+@keyframes modalAparece {
+    from { opacity: 0; }
+    to { opacity: 0.7; }
+}
+
+@keyframes windowAparece {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +16,7 @@
 
     <script type="module" src="./assets/scss/components/asistente/animation.js"></script>
     <script type="module" src="./assets/scss/components/menu/c-menu.js"></script>
+    <script type="module" src="./assets/scss/components/modal/c-modal.js"></script>
     <script type="module" src="./assets/js/index.js"></script>
 
     <link rel="stylesheet" href="./assets/css/main.css">
@@ -36,11 +36,8 @@
                 <a class="c-menu__option c-menu__option--selected" id="menu-inicio"><i
                         class="c-menu__icon fas fa-home"></i>Inicio</a>
                 <a class="c-menu__option"><i class="c-menu__icon fas fa-address-card"></i>Sobre nosotros</a>
-                <a id="iniciosesion" class="c-menu__option c-menu__option--right" data-toggle="modal"
-                    data-target="#modalLoginForm"><i class=" c-menu__icon fas fa-sign-in-alt"></i>Inicia
-                    Sesión</a>
-                <a id="register" class="c-menu__option c-menu__option"><i
-                        class="c-menu__icon fas fa-user-plus"></i>Regístrate</a>
+                <a class="c-menu__option c-menu__option--right" id="iniciosesion" data-toggle="modal" data-target="#modalLoginForm"><i class="c-menu__icon fas fa-sign-in-alt"></i>Inicia Sesión</a>
+                <a class="c-menu__option" id="register"><i class="c-menu__icon fas fa-user-plus"></i>Regístrate</a>
             </div>
         </div>
         <div class="l-page__left">
@@ -50,61 +47,56 @@
             </div>
         </div>
         <div class="l-page__right" id="contenido">
-            <!-- <div class="l-columns"> -->
-            <!-- <div class="l-columns__area">
-                    <div class="c-section c-section--padding-horizontal-xs c-section--padding-top-xl">
-                        <div class="c-section__content">
-                            <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-                                <ol class="carousel-indicators">
-                                </ol>
-                                <div class="carousel-inner">
-                                </div>
-                                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button"
-                                    data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button"
-                                    data-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- <div class="l-columns__area">
-                    <div
-                        class="c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-m">
-                        <h1 class="c-section__title">Categorías</h1>
-                        <div class="c-section__content">
-                            <div class="l-columns l-columns--3-columns" id="cartas">
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- <div class="l-columns__area">
-                    <div class="c-section">
-                        <div class="c-section__content">
-                            <div class="c-asistente" style="background-image: url('./assets/img/fondo-asistente.jpg')">
-                                <h2 class="c-asistente__cabecera"> <i class="far fa-comment-alt"></i>
-                                    ¿Necesitas ayuda?</h2>
-                                <p class="c-asistente__texto">
-                                    Llámanos al 636 876 856 y te atenderemos personalmente.
-                                </p>
-                                <img class="c-asistente__imagen" src="./assets/img/asistente.jpg">
-                                <a class="c-asistente__cerrar"><i class="far fa-window-close"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div> -->
-            <!-- </div> -->
-
         </div>
-
+        <div class="l-page__footer">
+            <div class="l-columns">
+                <div class="l-columns__area">
+                    <div class="c-section c-section--dark c-section--padding-horizontal-xl c-section--padding-top-xs">
+                        <div class="c-section__content">
+                            <div class="l-columns l-columns--2-columns l-columns--1-columns@movil">
+                                <div class="l-columns__area">
+                                    <ul class="c-list c-list--border-right">
+                                        <li class="c-list__title">Creadores</li>
+                                        <li class="c-list__option">Luis Nieto</li>
+                                        <li class="c-list__option">Mirta López</li>
+                                        <li class="c-list__option">Ivan Repiso</li>
+                                        <li class="c-list__option">Samir Djoudi</li>
+                                        <li class="c-list__option">Paco Barrachina</li>
+                                    </ul>
+                                </div>
+                                <div class="l-columns__area">
+                                    <ul class="c-list c-list--margin-top">
+                                        <li class="c-list__title">Contacta</li>
+                                        <li class="c-list__option">Email: easylife@gmail.com</li>
+                                        <li class="c-list__option">Teléfono: 636 876 856</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="l-page__modals">
+            <div class="c-modal c-modal" id="registro">
+                <div class="c-modal__background"></div>
+                <div class="c-modal__window">
+                    <div class="c-modal__header">
+                        <h3 class="c-modal__title">Registro</h3>
+                    </div>
+                    <div class="c-modal__content">
+                        <input class='c-modal__text-field' id='name-registro'  type="text" placeholder="Nombre"/>
+                        <input class='c-modal__text-field' id='email-registro' type="text" placeholder="Email.."/>
+                        <input class='c-modal__text-field' id='password-registro' type="password" placeholder="Password"/>
+                        <input class='c-modal__text-field' type="password" placeholder="Repeat password"/>
+                        <input class='c-modal__text-field' id='dni-registro' placeholder="DNI"/>
+                    </div>
+                    <div class="c-modal__footer">
+                        <a class="c-modal__button" id="boton-registrar">Registrar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="l-columns__area">
             <div class="c-section">
                 <div class="c-section__content">
@@ -141,48 +133,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--                        <div class="text-center">
-                                <a href="" class="btn btn-default btn-rounded mb-4" data-toggle="modal"
-                                    data-target="#modalLoginForm">Launch
-                                    Modal Login Form</a>
-                            </div> -->
                 </div>
             </div>
         </div>
     </div>
-
-    </div>
-    <div class="l-page__footer">
-        <div class="l-columns">
-            <div class="l-columns__area">
-                <div class="c-section c-section--dark c-section--padding-horizontal-xl c-section--padding-top-xs">
-                    <div class="c-section__content">
-                        <div class="l-columns l-columns--2-columns l-columns--1-columns@movil">
-                            <div class="l-columns__area">
-                                <ul class="c-list c-list--border-right">
-                                    <li class="c-list__title">Creadores</li>
-                                    <li class="c-list__option">Luis Nieto</li>
-                                    <li class="c-list__option">Mirta López</li>
-                                    <li class="c-list__option">Ivan Repiso</li>
-                                    <li class="c-list__option">Samir Djoudi</li>
-                                    <li class="c-list__option">Paco Barrachina</li>
-                                </ul>
-                            </div>
-                            <div class="l-columns__area">
-                                <ul class="c-list c-list--margin-top">
-                                    <li class="c-list__title">Contacta</li>
-                                    <li class="c-list__option">Email: easylife@gmail.com</li>
-                                    <li class="c-list__option">Teléfono: 636 876 856</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     </div>
 </body>
-
 </html>
