@@ -3,8 +3,67 @@ import { menu } from '../scss/components/menu/c-menu.js';
 
 let categorias;
 let imagenesCarrusel;
-
+let sesionData;
+let miToken;
 const $baseURL = "http://localhost/api/public/api/";
+/* const miToken */
+let content = $(".l-page__right");
+let carrousel = $(".c-section__content");
+
+
+let btnLogin = $("#iniciosesion");
+let btnRegister = $("#register");
+let startLogin = $("#startLogin");
+let modalForm = $("#modalLoginForm");
+let dataLogin;
+
+$(function () {
+    btnLogin.on("click", function () {
+        startLogin.on("click", function () {
+            let emailData = $("#defaultForm-email")[0].value;
+            let passwordData = $("#defaultForm-pass")[0].value;
+            $.ajax({
+                url: $baseURL + 'auth/login',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    email: emailData,
+                    password: passwordData
+                }
+            }).done(function (respuestaSesion) {
+                console.log("a pelo", respuestaSesion)
+                miToken = respuestaSesion['access_token'];
+                localStorage.setItem("miToken", miToken);
+                console.log("el token", miToken);
+                let name = respuestaSesion['user']['name'];
+                let image = respuestaSesion['user']['image'];
+                let modalForm = $("#modalLoginForm");
+                modalForm.modal("hide");
+                pintarMenuUser(miToken, name, image);
+
+            }).fail(function () {
+                console.log("algohafallado")
+            })
+
+        })
+    })
+})
+
+
+
+
+
+/*     let peticionInicioSesion = $.ajax({
+ 
+        url: $baseURL + 'auth/login',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            email: 'admin2@admin.com',
+            password: 'adminadmin'
+        }
+ 
+    }) */
 
 let peticionCategorias = $.ajax({
     url: $baseURL + 'categoria',
@@ -21,6 +80,7 @@ let peticionCarrusel = $.ajax({
 $(function () {
     $.when(peticionCategorias, peticionCarrusel)
         .done(function (respuestaCategoria, respuestaCarrusel) {
+            console.log("hola")
             categorias = respuestaCategoria[0];
             imagenesCarrusel = respuestaCarrusel[0];
 
@@ -43,7 +103,7 @@ $(function () {
                 mostrarErrorDatos(imagenesCarrusel);
             }
 
-            if ( imagesReady && categoriasReady) {
+            if (imagesReady && categoriasReady) {
                 cargarPaginaInicio();
             }
 
@@ -55,9 +115,10 @@ $(function () {
         });
 })
 
+
 function cargarPaginaInicio() {
     $('#contenido').empty();
-    let lColumns = $('<div/>').addClass('l-columns').attr('id','l-columns-contenido');
+    let lColumns = $('<div/>').addClass('l-columns').attr('id', 'l-columns-contenido');
     $('#contenido').append(lColumns);
     cargarCarousel();
     cargarCartasSection();
@@ -69,11 +130,11 @@ function cargarPaginaInicio() {
 function cargarCarousel() {
     let lColumns = $('#l-columns-contenido');
     let lColumnsArea = $('<div/>').addClass('l-columns__area');
-    let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xl c-section--padding-horizontal-xs');        
+    let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xl c-section--padding-horizontal-xs');
     let sectionContent = $('<div/>').addClass('c-section__content');
     let carouselContainer = $('<div/>').addClass('carousel slide').attr({
-        id:'carouselExampleCaptions',
-        'data-ride':'carousel'
+        id: 'carouselExampleCaptions',
+        'data-ride': 'carousel'
     });
     let ol = $('<ol/>').addClass('carousel-indicators');
     let carouselInner = $('<div/>').addClass('carousel-inner');
@@ -123,6 +184,65 @@ function cargarCartasSection() {
     lColumns.append(lColumnsArea);
 
     cargarCartas();
+
+}
+
+function pintarMenuUser(miToken, name, image) {
+    /*    let btnRegister = $("#register"); */
+    let modalAvatar = $("<a>"); // Contendrá el div que añadiremos al menu para la foto
+    let divImgAvatar = $("<img>");
+    modalAvatar.addClass("c-menu__option c-menu__option--avatar"); // Esta clase configurará el tamaño
+    modalAvatar.attr("id", "miavatar")
+    modalAvatar.append(divImgAvatar);
+    divImgAvatar.attr("src", "assets/img/" + image);
+    divImgAvatar.addClass("c-menu__option--avatar");
+    console.log(divImgAvatar);
+    console.log(modalAvatar);
+    let menu = $(".c-menu");
+    menu.append(modalAvatar);
+    btnLogin.html(name);
+    btnLogin.removeAttr("data-toggle");
+    btnLogin.removeAttr("data-target")
+    btnRegister.html("Cerrar sesion");
+    btnRegister.attr("id", "logout")
+
+    console.log(miToken)
+    logoutSesion();
+
+
+
+}
+
+function logoutSesion() {
+    let btnLogout = $("#logout");
+    let miTokenStorage = localStorage.getItem("miToken");
+
+    btnLogout.on("click", function () {
+        $.ajax({
+            url: $baseURL + 'auth/logout?token=' + miTokenStorage,
+            type: 'POST',
+            dataType: 'json',
+        }).done(function (respuestaLogout) {
+            console.log(respuestaLogout);
+            alert("Sesión cerrada correctamente");
+            localStorage.clear();
+            // Intento 1
+
+            var url = "http://localhost/site";
+            $(location).attr('href', url);
+
+            /*    // Intento 2
+   
+               $(location).reload(); */
+
+        }).fail(function () {
+            console.log("Algo ha fallado");
+        })
+    });
+
+
+
+
 }
 
 function cargarCartas() {
@@ -158,7 +278,7 @@ function cargarCartas() {
 
 }
 
-function cargarAsistente(){
+function cargarAsistente() {
     let lColumns = $('#l-columns-contenido');
     let lColumnsArea = $('<div/>').addClass('l-columns__area');
     let section = $('<div/>').addClass('c-section');
@@ -215,10 +335,10 @@ function setListenersItemsSidebar() {
 }
 
 function mostrarServicios(idCategoria) {
-    
+
     $('#contenido').empty();
     $.ajax({
-        url: $baseURL+'categoria/'+idCategoria+'/servicio/',
+        url: $baseURL + 'categoria/' + idCategoria + '/servicio/',
         dataType: 'json',
         type: 'GET',
     }).done((response) => {
@@ -227,12 +347,12 @@ function mostrarServicios(idCategoria) {
         let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-s');
         let sectionContent = $('<div/>').addClass('c-section__content');
         let lColumnsInsideSection = $('<div/>').addClass('l-columns l-columns--4-columns').attr('id', 'contenedor-articulos');
-        $.each(response.data, function(index, value){
+        $.each(response.data, function (index, value) {
             let lColumnsInsideSectionArea = $('<div/>').addClass('l-columns__area');
             let articulo = $('<div/>').addClass('c-articulo');
-            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src','./assets/img/img1.jpg');
+            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src', './assets/img/img1.jpg');
             let articuloTitulo = $('<h3/>').addClass('c-articulo__title').text(value.nombre);
-            let articuloPrecio = $('<h6/>').addClass('c-articulo__price').text(value.precio+'€');
+            let articuloPrecio = $('<h6/>').addClass('c-articulo__price').text(value.precio + '€');
             let articuloBoton = $('<a/>').addClass('c-articulo__button').text('Ver en detalle');
 
             articulo.append(articuloImg);
@@ -254,8 +374,8 @@ function mostrarServicios(idCategoria) {
     });
 }
 
-function addListenersServicios(){
-    $(".c-articulo").on("click", ".c-articulo__button", function(){
+function addListenersServicios() {
+    $(".c-articulo").on("click", ".c-articulo__button", function () {
         alert('Mostrar modal con la información');
     });
 }
@@ -270,8 +390,6 @@ function getImgCarrusel() {
     var carrouselfather = $(".carousel-inner");
     var numsliders = $(".carousel-indicators");
     var contador = 1;
-
-
 
     $.each(imagenesCarrusel.data, function (index, elementoCarrusel) {
 
@@ -300,10 +418,10 @@ function setListenersMenu() {
 }
 
 function setListenersButtonsMenu() {
-    $('.c-menu').on('click', '.c-menu__option', function(){
+    $('.c-menu').on('click', '.c-menu__option', function () {
         let id = $(this).attr('id');
 
-        if ( id === 'menu-inicio' ) {
+        if (id === 'menu-inicio') {
             cargarPaginaInicio();
         }
     })
