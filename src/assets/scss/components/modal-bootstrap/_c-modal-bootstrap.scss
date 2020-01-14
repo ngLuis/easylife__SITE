@@ -1,0 +1,32 @@
+.c-modal-bootstrap {
+    &-body {
+
+    }
+    &__titulo {
+        font-size: 2em;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #333;
+        margin-left: 35px;
+    }
+    &__img {
+        width: 350px;
+        border: 3px solid gold;
+        border-radius: 20px;
+        box-shadow: 10px 10px 5px #888;
+        margin-left: 55px;
+    }
+    &__precio {
+        margin-top: 30px;
+        font-size: 1em;
+        font-weight: 600;
+        color: tomato;
+    }
+    &__texto {
+        font-size: 1.2em;
+        color: #333;
+    }
+    &__content {
+        
+        font-family: Arial, Helvetica, sans-serif;
+    }
+}

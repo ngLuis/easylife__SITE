@@ -6,6 +6,9 @@ let categorias;
 let imagenesCarrusel;
 let sesionData;
 let miToken;
+let serviciosActuales = [];
+let carrito = [];
+let servicioSeleccionado;
 const $baseURL = "http://localhost/api/public/api/";
 /* const miToken */
 let content = $(".l-page__right");
@@ -92,6 +95,7 @@ $(function () {
             setListenersMenu();
             setListenersModal();
             setListenersModalElements();
+            setListenerModalServicio();
         })
         .fail(function (xhr) {
             console.log("ERROR del servidor: " + xhr.status + "(" + xhr.statusText + ")");
@@ -316,6 +320,9 @@ function mostrarServicios(idCategoria) {
         dataType: 'json',
         type: 'GET',
     }).done((response) => {
+        serviciosActuales = [];
+        serviciosActuales.push(response.data);
+        console.log(serviciosActuales);
         let lColumns = $('<div/>').addClass('l-columns');
         let lColumnsArea = $('<div/>').addClass('l-columns__area');
         let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-s');
@@ -327,7 +334,11 @@ function mostrarServicios(idCategoria) {
             let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src', './assets/img/img1.jpg');
             let articuloTitulo = $('<h3/>').addClass('c-articulo__title').text(value.nombre);
             let articuloPrecio = $('<h6/>').addClass('c-articulo__price').text(value.precio + '€');
-            let articuloBoton = $('<a/>').addClass('c-articulo__button').text('Ver en detalle');
+            let articuloBoton = $('<button/>').addClass('c-articulo__button').text('Ver en detalle').attr({
+                "id":"servicio-" + value.id,
+                'data-toggle':'modal',
+                'data-target':'#modalServicios'
+            });
 
             articulo.append(articuloImg);
             articulo.append(articuloTitulo);
@@ -350,7 +361,35 @@ function mostrarServicios(idCategoria) {
 
 function addListenersServicios() {
     $(".c-articulo").on("click", ".c-articulo__button", function () {
-        alert('Mostrar modal con la información');
+        let idServicio = $(this).attr("id").split("-")[1];
+        servicioSeleccionado = $.grep(serviciosActuales[0], function(servicio){ return servicio.id == idServicio });
+        cargarModal(servicioSeleccionado[0]);
+    });
+}
+
+
+function cargarModal(servicio) {
+    $(".modal-body-servicio").empty();
+    $(".modal-title").empty();
+    $(".modal-title").addClass("c-modal-bootstrap__titulo").append(servicio.nombre);
+
+    let imagen = $("<img>").attr("src", "./assets/img/img1.jpg").addClass("c-modal-bootstrap__img");
+
+    let precio = $("<p>").text("Precio: " + servicio.precio + " €").addClass("c-modal-bootstrap__precio");
+    let texto = $("<p>").text(servicio.descripcion).addClass("c-modal-bootstrap__texto");
+            
+    let modal = $("<div>").addClass("c-modal-bootstrap__content");
+    modal.append(imagen);
+    modal.append(precio);
+    modal.append(texto);
+    $(".modal-body-servicio").append(modal);
+}
+
+function setListenerModalServicio() {
+    $('#anyadir-carrito').on('click', function(){
+        carrito.push(servicioSeleccionado[0]);
+        console.log(carrito);
+        $("#modalServicios").modal("hide");
     });
 }
 
