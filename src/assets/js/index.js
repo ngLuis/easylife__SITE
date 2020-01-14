@@ -1,13 +1,15 @@
 import { informacion, volver } from '../scss/components/asistente/animation.js';
 import { menu } from '../scss/components/menu/c-menu.js';
 import { setListenersModal } from '../scss/components/modal/c-modal.js';
+import { Carrito } from './Classes/Carrito.js';
+import { Servicio } from './Classes/Servicio.js';
 
 let categorias;
 let imagenesCarrusel;
 let sesionData;
 let miToken;
-let serviciosActuales = [];
-let carrito = [];
+let serviciosActuales;
+let carrito = new Carrito();
 let servicioSeleccionado;
 const $baseURL = "http://localhost/api/public/api/";
 /* const miToken */
@@ -22,7 +24,6 @@ let modalForm = $("#modalLoginForm");
 let dataLogin;
 
 $(function () {
-    btnLogin.on("click", function () {
         startLogin.on("click", function () {
             let emailData = $("#defaultForm-email")[0].value;
             let passwordData = $("#defaultForm-pass")[0].value;
@@ -46,9 +47,7 @@ $(function () {
             }).fail(function () {
                 console.log("algo ha fallado")
             })
-
         })
-    })
 })
 
 let peticionCategorias = $.ajax({
@@ -207,7 +206,6 @@ function logoutSesion() {
             type: 'POST',
             dataType: 'json',
         }).done(function (respuestaLogout) {
-            console.log(respuestaLogout);
             alert("Sesión cerrada correctamente");
             localStorage.clear();
             var url = "http://localhost/site";
@@ -320,9 +318,7 @@ function mostrarServicios(idCategoria) {
         dataType: 'json',
         type: 'GET',
     }).done((response) => {
-        serviciosActuales = [];
-        serviciosActuales.push(response.data);
-        console.log(serviciosActuales);
+        serviciosActuales = response.data;
         let lColumns = $('<div/>').addClass('l-columns');
         let lColumnsArea = $('<div/>').addClass('l-columns__area');
         let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-s');
@@ -331,10 +327,10 @@ function mostrarServicios(idCategoria) {
         $.each(response.data, function (index, value) {
             let lColumnsInsideSectionArea = $('<div/>').addClass('l-columns__area');
             let articulo = $('<div/>').addClass('c-articulo');
-            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src', './assets/img/img1.jpg');
+            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src', './assets/img/servicios/'+value.imagen);
             let articuloTitulo = $('<h3/>').addClass('c-articulo__title').text(value.nombre);
             let articuloPrecio = $('<h6/>').addClass('c-articulo__price').text(value.precio + '€');
-            let articuloBoton = $('<button/>').addClass('c-articulo__button').text('Ver en detalle').attr({
+            let articuloBoton = $('<a/>').addClass('c-articulo__button').text('Ver en detalle').attr({
                 "id":"servicio-" + value.id,
                 'data-toggle':'modal',
                 'data-target':'#modalServicios'
@@ -362,8 +358,9 @@ function mostrarServicios(idCategoria) {
 function addListenersServicios() {
     $(".c-articulo").on("click", ".c-articulo__button", function () {
         let idServicio = $(this).attr("id").split("-")[1];
-        servicioSeleccionado = $.grep(serviciosActuales[0], function(servicio){ return servicio.id == idServicio });
-        cargarModal(servicioSeleccionado[0]);
+        let servicio = $.grep(serviciosActuales, function(servicio){ return servicio.id == idServicio })[0];
+        servicioSeleccionado = new Servicio(servicio.id, servicio.nombre, servicio.categoria_id, servicio.precio, servicio.imagen, servicio.descripcion);
+        cargarModal(servicioSeleccionado);
     });
 }
 
@@ -373,7 +370,7 @@ function cargarModal(servicio) {
     $(".modal-title").empty();
     $(".modal-title").addClass("c-modal-bootstrap__titulo").append(servicio.nombre);
 
-    let imagen = $("<img>").attr("src", "./assets/img/img1.jpg").addClass("c-modal-bootstrap__img");
+    let imagen = $("<img>").attr("src", "./assets/img/servicios/"+servicio.imagen).addClass("c-modal-bootstrap__img");
 
     let precio = $("<p>").text("Precio: " + servicio.precio + " €").addClass("c-modal-bootstrap__precio");
     let texto = $("<p>").text(servicio.descripcion).addClass("c-modal-bootstrap__texto");
@@ -387,8 +384,7 @@ function cargarModal(servicio) {
 
 function setListenerModalServicio() {
     $('#anyadir-carrito').on('click', function(){
-        carrito.push(servicioSeleccionado[0]);
-        console.log(carrito);
+        carrito.addServicio(servicioSeleccionado);
         $("#modalServicios").modal("hide");
     });
 }
@@ -426,20 +422,16 @@ function getImgCarrusel() {
 }
 
 function setListenersMenu() {
-    console.log('Entra en listeners menu');
     menu();
     setListenersButtonsMenu();
 }
 
 function setListenersButtonsMenu() {
     $('.c-menu').on('click', '.c-menu__option', function () {
-        console.log('El click funciona');
         let id = $(this).attr('id');
-        console.log('Esta es la id: '+id);
         if (id === 'menu-inicio') {
             cargarPaginaInicio();
         } else if ( id === 'register' ) {
-            console.log('Entra dentro de menu-registro');
             if ($('#register').text() === 'Regístrate'){
                 showModal('registro');
             } else {
