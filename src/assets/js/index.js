@@ -57,7 +57,7 @@ let peticionCategorias = $.ajax({
 });
 
 let peticionCarrusel = $.ajax({
-    url: $baseURL + 'carrusel',
+    url: $baseURL + 'carousel',
     type: "GET",
     dataType: "json"
 });
@@ -229,7 +229,7 @@ function cargarCartas() {
 
         let componenteCard = $('<div>').addClass('c-card');
 
-        let cardImg = $('<img>').attr('src', './assets/img/cartas/' + element.imagen).addClass('c-card__img');
+        let cardImg = $('<img>').attr('src', 'http://localhost/api/storage/app/public/categorias/' + element.imagen).addClass('c-card__img');
 
         let cardContenido = $('<div>').addClass('c-card__content');
         let cardTitulo = $('<h2>').addClass('c-card__title').append(element.nombre);
@@ -327,7 +327,7 @@ function mostrarServicios(idCategoria) {
         $.each(response.data, function (index, value) {
             let lColumnsInsideSectionArea = $('<div/>').addClass('l-columns__area');
             let articulo = $('<div/>').addClass('c-articulo');
-            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src', './assets/img/servicios/'+value.imagen);
+            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src','http://localhost/api/storage/app/public/servicios/' + value.imagen);
             let articuloTitulo = $('<h3/>').addClass('c-articulo__title').text(value.nombre);
             let articuloPrecio = $('<h6/>').addClass('c-articulo__price').text(value.precio + '€');
             let articuloBoton = $('<a/>').addClass('c-articulo__button').text('Ver en detalle').attr({
@@ -370,7 +370,7 @@ function cargarModal(servicio) {
     $(".modal-title").empty();
     $(".modal-title").addClass("c-modal-bootstrap__titulo").append(servicio.nombre);
 
-    let imagen = $("<img>").attr("src", "./assets/img/servicios/"+servicio.imagen).addClass("c-modal-bootstrap__img");
+    let imagen = $("<img>").attr("src", 'http://localhost/api/storage/app/public/servicios/' + servicio.imagen).addClass("c-modal-bootstrap__img");
 
     let precio = $("<p>").text("Precio: " + servicio.precio + " €").addClass("c-modal-bootstrap__precio");
     let texto = $("<p>").text(servicio.descripcion).addClass("c-modal-bootstrap__texto");
@@ -405,14 +405,14 @@ function getImgCarrusel() {
         if (index == 0) {
             numsliders.append("<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"0\" class=\"active\"></li>");
             carrouselfather.append("<div class=\"carousel-item active\">" +
-                "<img src='assets/img/" + elementoCarrusel.imagen + "' class=\"d-block w-100\">" +
+                "<img src='http://localhost/api/storage/app/public/carousel/" + elementoCarrusel.imagen + "' class=\"d-block w-100\">" +
                 "<div class=\"carousel-caption d-none d-md-block\">" + "<h5>" + elementoCarrusel.titulo + "</h5>" + "<p>" + elementoCarrusel.descripcion + "</p>" + " </div>" + "</div>"
             );
 
         } else {
             numsliders.append("<li data-target=\"#carouselExampleCaptions\" data-slide-to=\"" + contador + "\"></li>");
             carrouselfather.append("<div class=\"carousel-item\">" +
-                "<img src='assets/img/" + elementoCarrusel.imagen + "' class=\"d-block w-100\">" +
+                "<img src='http://localhost/api/storage/app/public/carousel/" + elementoCarrusel.imagen + "' class=\"d-block w-100\">" +
                 "<div class=\"carousel-caption d-none d-md-block\">" + " <h5>" + elementoCarrusel.titulo + "</h5> " + "<p>" + elementoCarrusel.descripcion + "</p>" + " </div>" + "</div>"
             );
             contador = contador + 1;
