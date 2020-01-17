@@ -154,6 +154,11 @@ function cargarCarousel() {
     lColumns.append(lColumnsArea)
 
     getImgCarrusel();
+
+    $('.carousel').carousel({
+        'data-pause': false,
+        'interval': 3000
+    })
 }
 
 function cargarCartasSection() {
