@@ -16,6 +16,7 @@
 
     <script type="module" src="./assets/js/Classes/Carrito.js"></script>
     <script type="module" src="./assets/js/Classes/Servicio.js"></script>
+    <script type="module" src="./assets/js/Classes/FormValidator.js"></script>
 
     <script type="module" src="./assets/scss/components/asistente/animation.js"></script>
     <script type="module" src="./assets/scss/components/menu/c-menu.js"></script>
@@ -81,7 +82,7 @@
             </div>
         </div>
         <div class="l-page__modals">
-            <div class="c-modal c-modal" id="registro">
+            <!-- <div class="c-modal" id="registro">
                 <div class="c-modal__background"></div>
                 <div class="c-modal__window">
                     <div class="c-modal__header">
@@ -96,6 +97,32 @@
                     </div>
                     <div class="c-modal__footer">
                         <a class="c-modal__button" id="boton-registrar">Registrar</a>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="c-modal" id="registro">
+                <div class="c-modal__background"></div>
+                <div class="c-modal__window">
+                    <div class="c-modal__header">
+                        <h3 class="c-modal__title">Registro</h3>
+                        <i class="c-modal__close-icon fas fa-times"></i>
+                    </div>
+                    <div class="c-modal__content">
+                        <form class="c-form" id="formulario-registro" name='form-registro' enctype="multipart/form-data">
+                            <p class="c-form__text-error">Debes introducir un nombre</p>
+                            <input class="c-form__input" input-form="INPUT_NAME" type="text" placeholder="Nombre"/>
+                            <p class="c-form__text-error">Debes introducir un email</p>
+                            <input class="c-form__input" input-form="INPUT_EMAIL" type="text" placeholder="Email"/>
+                            <p class="c-form__text-error">Debes introducir una contraseña</p>
+                            <input class="c-form__input" input-form="INPUT_PASSWORD1" type="password" placeholder="Contraseña"/>
+                            <p class="c-form__text-error">Debes introducir una contraseña</p>
+                            <input class="c-form__input" input-form="INPUT_PASSWORD2" type="password" placeholder="Repite Contraseña"/>
+                            <p class="c-form__text-error">Debes introducir un dni</p>
+                            <input class="c-form__input" input-form="INPUT_DNI" type="text" placeholder="DNI"/>
+                            <input class="c-form__input" input-form="INPUT_FILE" type="file"/>
+                            <button class="c-form__button" id="boton-registrar" type="button" disabled="disabled">Registrar</button>
+                        </form>
                     </div>
                 </div>
             </div>

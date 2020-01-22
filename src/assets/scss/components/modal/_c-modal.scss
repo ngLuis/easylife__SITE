@@ -28,7 +28,7 @@
         top: 20%;
         left: 35%;
         width: 600px;
-        background-color: $footer;
+        background-color: white;
         border: 1px solid darken($footer, 25%);
         opacity: 1;
         animation-name: windowAparece;
@@ -40,10 +40,11 @@
     &__header {
         padding: 15px;
         border-bottom: 1px solid darken($footer, 25%);
+        display: flex;
     }
 
     &__content {
-        padding: 15px;
+        padding: 15px 90px;
     }
 
     &__footer {
@@ -55,19 +56,14 @@
     &__title {
         font-size: 23px;
         font-weight: bold;
+        display: inline-block;
     }
 
-    &__text-field {
-        width: 75%;
-        height: 45px;
-        font-size: 23px;
-        margin-bottom: 20px;
-        color: $texto !important;
-        outline: none;
-        margin-left: 15px;
+    &__close-icon {
+        margin-left: auto;
 
-        &::placeholder {
-            padding: 5px;
+        &:hover {
+            cursor: pointer;
         }
     }
 

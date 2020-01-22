@@ -3,6 +3,7 @@ import { menu } from '../scss/components/menu/c-menu.js';
 import { setListenersModal } from '../scss/components/modal/c-modal.js';
 import { Carrito } from './Classes/Carrito.js';
 import { Servicio } from './Classes/Servicio.js';
+import { FormValidator } from './Classes/FormValidator.js';
 
 let categorias;
 let imagenesCarrusel;
@@ -10,6 +11,7 @@ let sesionData;
 let miToken;
 let serviciosActuales;
 let carrito = new Carrito();
+let formValidator = new FormValidator();
 let servicioSeleccionado;
 const $baseURL = "http://localhost/api/public/api/";
 /* const miToken */
@@ -186,7 +188,7 @@ function pintarMenuUser(name, image) {
     modalAvatar.addClass("c-menu__option c-menu__option--avatar"); // Esta clase configurará el tamaño
     modalAvatar.attr("id", "miavatar")
     modalAvatar.append(divImgAvatar);
-    divImgAvatar.attr("src", "assets/img/" + image);
+    divImgAvatar.attr("src", "http://localhost/api/storage/app/public/avatars/" + image);
     divImgAvatar.addClass("c-menu__option--avatar");
     let menu = $(".c-menu");
     menu.append(modalAvatar);
@@ -316,19 +318,18 @@ function setListenersItemsSidebar() {
 }
 
 function mostrarServicios(idCategoria) {
-
-    $('#contenido').empty();
     $.ajax({
-        url: $baseURL + 'categoria/' + idCategoria + '/servicio/',
+        url: $baseURL + 'categoria/' + idCategoria + '/servicio',
         dataType: 'json',
         type: 'GET',
     }).done((response) => {
+        $('#contenido').empty();
         serviciosActuales = response.data;
         let lColumns = $('<div/>').addClass('l-columns');
         let lColumnsArea = $('<div/>').addClass('l-columns__area');
         let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-s');
         let sectionContent = $('<div/>').addClass('c-section__content');
-        let lColumnsInsideSection = $('<div/>').addClass('l-columns l-columns--4-columns').attr('id', 'contenedor-articulos');
+        let lColumnsInsideSection = $('<div/>').addClass('l-columns l-columns--3-columns').attr('id', 'contenedor-articulos');
         $.each(response.data, function (index, value) {
             let lColumnsInsideSectionArea = $('<div/>').addClass('l-columns__area');
             let articulo = $('<div/>').addClass('c-articulo');
@@ -439,6 +440,24 @@ function setListenersButtonsMenu() {
         } else if ( id === 'register' ) {
             if ($('#register').text() === 'Regístrate'){
                 showModal('registro');
+                $('#formulario-registro').on('keyup', 'input', function(){
+                    let inputValue = $(this).val();
+                    let inputType = $(this).attr('input-form');
+
+                    formValidator.regularExpressions.INPUT_PASSWORD1 = $('[input-form="INPUT_PASSWORD1"]').val();
+                    formValidator.regularExpressions.INPUT_PASSWORD2 = $('[input-form="INPUT_PASSWORD2"]').val();
+
+                    let message = formValidator.validateInput(inputType, inputValue);
+                    if ( inputType === 'INPUT_PASSWORD1' || inputType === 'INPUT_PASSWORD2' ) {
+                        $('[input-form="INPUT_PASSWORD1"]').prev().text(message);
+                        $('[input-form="INPUT_PASSWORD2"]').prev().text(message);
+                    } else {
+                        $(this).prev().text(message);
+                    }
+                    
+
+                    $('#boton-registrar').attr('disabled', formValidator.getButtonState());
+                });
             } else {
                 cambiarValoresMenu();
             }
@@ -454,26 +473,28 @@ function setListenersModalElements() {
 }
 
 function registrarUsuario() {
-    const user = {
-        "name": $('#name-registro').val(),
-        "email": $('#email-registro').val(),
-        "password": $('#password-registro').val(),
-        "dni": $('#dni-registro').val(),
-        "type": "1",
-    }
+    const userForm = new FormData();
+    userForm.append("name", $('[input-form="INPUT_NAME"]').val());
+    userForm.append("email", $('[input-form="INPUT_EMAIL"]').val());
+    userForm.append("password", $('[input-form="INPUT_PASSWORD1"]').val());
+    userForm.append("dni", $('[input-form="INPUT_DNI"]').val());
+    userForm.append("type", '0');
+    userForm.append("avatar", $('[input-form="INPUT_FILE"]')[0].files[0]);
 
+    // //Abajo añadir processData: false
     $.ajax({
         url: $baseURL+'auth/register',
         type: 'POST',
-        dataType: 'json',
-        data: user
+        data: userForm,
+        processData: false,
+        contentType: false,
     })
     .done((response) => {
         console.log(response);
         localStorage.setItem('access_token', response.access_token);
-        $(this).parent().parent().parent().removeClass('c-modal--show');
-        let image = 'asdsad';
-        pintarMenuUser(user.name, image);
+        $(this).parent().parent().parent().parent().removeClass('c-modal--show');
+        let image = 'harold.jpg';
+        pintarMenuUser($('[input-form="INPUT_NAME"]').val(), response.user.image);
     })
     .fail((response) => {
         console.log(response);
