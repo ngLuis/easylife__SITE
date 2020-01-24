@@ -93,6 +93,11 @@ $(function () {
                 cargarPaginaInicio();
             }
 
+            if (localStorage.getItem("access_token") == null) {
+                defaultMenu();
+            } else {
+                refreshMenu();
+            }
             setListenersMenu();
             setListenersModal();
             setListenersModalElements();
@@ -103,6 +108,15 @@ $(function () {
             console.log("Más información: ", xhr);
         });
 })
+
+function defaultMenu() {
+    let iniSesion = $('<i/>').addClass('c-menu__icon fas fa-sign-in-alt');
+    $('#iniciosesion').append(iniSesion);
+    $('#iniciosesion').append('Inicio Sesión');
+    let regist = $('<i/>').addClass('c-menu__icon fas fa-user-plus');
+    $('#register').append(regist);
+    $('#register').append('Regístrate');
+}
 
 
 function cargarPaginaInicio() {
@@ -201,6 +215,20 @@ function pintarMenuUser(name, image) {
 
 
 
+}
+
+function refreshMenu() {
+    let miTokenStorage = localStorage.getItem("access_token");
+        $.ajax({
+            url: $baseURL + 'auth/me?token=' + miTokenStorage,
+            type: 'POST',
+            dataType: 'json',
+        }).done(function (response) {
+            pintarMenuUser(response.name, response.image);
+            
+        }).fail(function (response) {
+            console.log("Algo ha fallado");
+        })
 }
 
 function logoutSesion() {
