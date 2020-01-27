@@ -47,6 +47,11 @@ $(function () {
             modalForm.modal("hide");
             pintarMenuUser(name, image);
 
+            //Guardamos datos del usuario en el localStorage y su ID en el carrito
+            localStorage.setItem('datosUsuario', JSON.stringify(respuestaSesion.user));
+            console.log("Guardado datos de usuario en localStorage: ", localStorage.getItem('datosUsuario'));
+            carrito.setUserID(respuestaSesion.user.id);
+
         }).fail(function () {
             console.log("algo ha fallado")
         })
@@ -222,10 +227,6 @@ function refreshMenu() {
         dataType: 'json',
     }).done(function (response) {
         pintarMenuUser(response.name, response.image);
-
-        //Guardamos datos del usuario en el localStorage y su ID en el carrito
-        localStorage.setItem('datosUsuario', JSON.stringify(response));
-        console.log("Guardado datos de usuario en localStorage: ", localStorage.getItem('datosUsuario'));
         carrito.setUserID(response.id);
     }).fail(function (response) {
         console.log("Algo ha fallado");
