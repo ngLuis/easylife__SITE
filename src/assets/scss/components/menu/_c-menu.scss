@@ -1,11 +1,13 @@
 .c-menu{
     @include crearPadding();
-
+    @include crearMargin();
     background-color: $menu-color;
     display: flex;
     flex-flow: row;
 
     &__option {
+        @include crearPadding();
+        @include crearMargin();
         padding: 20px;
         height: 100%;
         color: $texto !important;
@@ -30,16 +32,6 @@
             margin-left: auto;
         }
 
-        &--avatar {
-            width: 65px;
-            padding-top: 0px;
-            padding-bottom: 0px;
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
     }
 
-    &__icon {
-        margin-right: 5px;
-    }
 }

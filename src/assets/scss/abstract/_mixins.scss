@@ -1,4 +1,5 @@
 $paddingSizes : ("none": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" : 30, "xxl" : 50);
+$marginSizes : ("none": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" : 30, "xxl" : 50);
 
 @mixin crearPadding(){
     @each $sizeName, $sizeValue in $paddingSizes {
@@ -33,6 +34,45 @@ $paddingSizes : ("none": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" 
             padding-bottom: $sizeValue#{'px'};
             padding-left: $sizeValue#{'%'};
             padding-right: $sizeValue#{'%'};
+        }
+
+    }
+}
+
+@mixin crearMargin(){
+
+    @each $sizeName, $sizeValue in $marginSizes {
+
+
+        &--margin-right-#{$sizeName}{
+            margin-right: $sizeValue#{'%'};
+        }
+        &--margin-left-#{$sizeName}{
+            margin-left: $sizeValue#{'%'};
+        }
+
+        &--margin-top-#{$sizeName}{
+            margin-top: $sizeValue#{'px'};
+        }
+        &--margin-bottom-#{$sizeName}{
+            margin-bottom: $sizeValue#{'px'};
+        }
+
+        &--margin-horizontal-#{$sizeName}{
+            margin-right: $sizeValue#{'%'};
+            margin-left: $sizeValue#{'%'};
+        }
+
+        &--margin-vertical-#{$sizeName}{
+            margin-top: $sizeValue#{'px'};
+            margin-bottom: $sizeValue#{'px'};
+        }
+
+        &--margin-#{$sizeName}{
+            margin-right: $sizeValue#{'%'};
+            margin-left: $sizeValue#{'%'};
+            margin-top: $sizeValue#{'px'};
+            margin-bottom: $sizeValue#{'px'};
         }
 
     }

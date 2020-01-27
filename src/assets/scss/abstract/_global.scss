@@ -1,0 +1,17 @@
+$paddingSizes : ("zero": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" : 30, "xxl" : 50);
+$marginSizes : ("zero": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" : 30, "xxl" : 50);
+
+
+
+@each $sizeName, $sizeValue in $paddingSizes {
+    .g--padding-#{sizeName}{
+        padding: $sizeValue#{'px'};
+    }
+}
+
+
+@each $sizeName, $sizeValue in $marginSizes {
+    .g--margin-#{sizeName}{
+        padding: $sizeValue#{'px'};
+    }
+}

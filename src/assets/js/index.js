@@ -26,30 +26,30 @@ let modalForm = $("#modalLoginForm");
 let dataLogin;
 
 $(function () {
-        startLogin.on("click", function () {
-            let emailData = $("#defaultForm-email")[0].value;
-            let passwordData = $("#defaultForm-pass")[0].value;
-            $.ajax({
-                url: $baseURL + 'auth/login',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    email: emailData,
-                    password: passwordData
-                }
-            }).done(function (respuestaSesion) {
-                miToken = respuestaSesion['access_token'];
-                localStorage.setItem("access_token", miToken);
-                let name = respuestaSesion['user']['name'];
-                let image = respuestaSesion['user']['image'];
-                let modalForm = $("#modalLoginForm");
-                modalForm.modal("hide");
-                pintarMenuUser(name, image);
+    startLogin.on("click", function () {
+        let emailData = $("#defaultForm-email")[0].value;
+        let passwordData = $("#defaultForm-pass")[0].value;
+        $.ajax({
+            url: $baseURL + 'auth/login',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                email: emailData,
+                password: passwordData
+            }
+        }).done(function (respuestaSesion) {
+            miToken = respuestaSesion['access_token'];
+            localStorage.setItem("access_token", miToken);
+            let name = respuestaSesion['user']['name'];
+            let image = respuestaSesion['user']['image'];
+            let modalForm = $("#modalLoginForm");
+            modalForm.modal("hide");
+            pintarMenuUser(name, image);
 
-            }).fail(function () {
-                console.log("algo ha fallado")
-            })
+        }).fail(function () {
+            console.log("algo ha fallado")
         })
+    })
 })
 
 let peticionCategorias = $.ajax({
@@ -192,18 +192,17 @@ function cargarCartasSection() {
     lColumns.append(lColumnsArea);
 
     cargarCartas();
-
 }
 
 function pintarMenuUser(name, image) {
-    /*    let btnRegister = $("#register"); */
-    let modalAvatar = $("<a>"); // Contendrá el div que añadiremos al menu para la foto
+    let modalAvatar = $("<a>"); // queda pendiente añadir modal (sam)
     let divImgAvatar = $("<img>");
-    modalAvatar.addClass("c-menu__option c-menu__option--avatar"); // Esta clase configurará el tamaño
+    modalAvatar.addClass("c-menu__option c-menu__option--padding-none c-menu__option--margin-none");
     modalAvatar.attr("id", "miavatar")
     modalAvatar.append(divImgAvatar);
-    divImgAvatar.attr("src", "http://localhost/api/storage/app/public/avatars/" + image);
-    divImgAvatar.addClass("c-menu__option--avatar");
+    divImgAvatar.attr("src", "assets/img/" + image);
+    divImgAvatar.addClass("g--padding-zero g--margin-zero");
+    divImgAvatar.attr("style", "width:65px; height:65px")
     let menu = $(".c-menu");
     menu.append(modalAvatar);
     btnLogin.html(name);
@@ -212,9 +211,6 @@ function pintarMenuUser(name, image) {
     btnRegister.html("Cerrar sesion");
     btnRegister.attr("id", "logout")
     logoutSesion();
-
-
-
 }
 
 function refreshMenu() {
@@ -361,13 +357,13 @@ function mostrarServicios(idCategoria) {
         $.each(response.data, function (index, value) {
             let lColumnsInsideSectionArea = $('<div/>').addClass('l-columns__area');
             let articulo = $('<div/>').addClass('c-articulo');
-            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src','http://localhost/api/storage/app/public/servicios/' + value.imagen);
+            let articuloImg = $('<img/>').addClass('c-articulo__image').attr('src', 'http://localhost/api/storage/app/public/servicios/' + value.imagen);
             let articuloTitulo = $('<h3/>').addClass('c-articulo__title').text(value.nombre);
             let articuloPrecio = $('<h6/>').addClass('c-articulo__price').text(value.precio + '€');
             let articuloBoton = $('<a/>').addClass('c-articulo__button').text('Ver en detalle').attr({
-                "id":"servicio-" + value.id,
-                'data-toggle':'modal',
-                'data-target':'#modalServicios'
+                "id": "servicio-" + value.id,
+                'data-toggle': 'modal',
+                'data-target': '#modalServicios'
             });
 
             articulo.append(articuloImg);
@@ -392,7 +388,7 @@ function mostrarServicios(idCategoria) {
 function addListenersServicios() {
     $(".c-articulo").on("click", ".c-articulo__button", function () {
         let idServicio = $(this).attr("id").split("-")[1];
-        let servicio = $.grep(serviciosActuales, function(servicio){ return servicio.id == idServicio })[0];
+        let servicio = $.grep(serviciosActuales, function (servicio) { return servicio.id == idServicio })[0];
         servicioSeleccionado = new Servicio(servicio.id, servicio.nombre, servicio.categoria_id, servicio.precio, servicio.imagen, servicio.descripcion);
         cargarModal(servicioSeleccionado);
     });
@@ -408,7 +404,7 @@ function cargarModal(servicio) {
 
     let precio = $("<p>").text("Precio: " + servicio.precio + " €").addClass("c-modal-bootstrap__precio");
     let texto = $("<p>").text(servicio.descripcion).addClass("c-modal-bootstrap__texto");
-            
+
     let modal = $("<div>").addClass("c-modal-bootstrap__content");
     modal.append(imagen);
     modal.append(precio);
@@ -417,7 +413,7 @@ function cargarModal(servicio) {
 }
 
 function setListenerModalServicio() {
-    $('#anyadir-carrito').on('click', function(){
+    $('#anyadir-carrito').on('click', function () {
         carrito.addServicio(servicioSeleccionado);
         $("#modalServicios").modal("hide");
     });
@@ -465,10 +461,10 @@ function setListenersButtonsMenu() {
         let id = $(this).attr('id');
         if (id === 'menu-inicio') {
             cargarPaginaInicio();
-        } else if ( id === 'register' ) {
-            if ($('#register').text() === 'Regístrate'){
+        } else if (id === 'register') {
+            if ($('#register').text() === 'Regístrate') {
                 showModal('registro');
-                $('#formulario-registro').on('keyup', 'input', function(){
+                $('#formulario-registro').on('keyup', 'input', function () {
                     let inputValue = $(this).val();
                     let inputType = $(this).attr('input-form');
 
@@ -476,13 +472,13 @@ function setListenersButtonsMenu() {
                     formValidator.regularExpressions.INPUT_PASSWORD2 = $('[input-form="INPUT_PASSWORD2"]').val();
 
                     let message = formValidator.validateInput(inputType, inputValue);
-                    if ( inputType === 'INPUT_PASSWORD1' || inputType === 'INPUT_PASSWORD2' ) {
+                    if (inputType === 'INPUT_PASSWORD1' || inputType === 'INPUT_PASSWORD2') {
                         $('[input-form="INPUT_PASSWORD1"]').prev().text(message);
                         $('[input-form="INPUT_PASSWORD2"]').prev().text(message);
                     } else {
                         $(this).prev().text(message);
                     }
-                    
+
 
                     $('#boton-registrar').attr('disabled', formValidator.getButtonState());
                 });
@@ -492,8 +488,8 @@ function setListenersButtonsMenu() {
         }
     })
 }
-function showModal( modalName ) {
-    $('#'+modalName).addClass('c-modal--show');
+function showModal(modalName) {
+    $('#' + modalName).addClass('c-modal--show');
 }
 
 function setListenersModalElements() {
@@ -511,29 +507,29 @@ function registrarUsuario() {
 
     // //Abajo añadir processData: false
     $.ajax({
-        url: $baseURL+'auth/register',
+        url: $baseURL + 'auth/register',
         type: 'POST',
         data: userForm,
         processData: false,
         contentType: false,
     })
-    .done((response) => {
-        console.log(response);
-        localStorage.setItem('access_token', response.access_token);
-        $(this).parent().parent().parent().parent().removeClass('c-modal--show');
-        let image = 'harold.jpg';
-        pintarMenuUser($('[input-form="INPUT_NAME"]').val(), response.user.image);
-    })
-    .fail((response) => {
-        console.log(response);
-        if ( response.responseJSON.code === 403 ) {
-            alert('Alguno de los datos no están bien introducidos');
-        }
-    });
+        .done((response) => {
+            console.log(response);
+            localStorage.setItem('access_token', response.access_token);
+            $(this).parent().parent().parent().parent().removeClass('c-modal--show');
+            let image = 'harold.jpg';
+            pintarMenuUser($('[input-form="INPUT_NAME"]').val(), response.user.image);
+        })
+        .fail((response) => {
+            console.log(response);
+            if (response.responseJSON.code === 403) {
+                alert('Alguno de los datos no están bien introducidos');
+            }
+        });
 }
 
 function cambiarValoresMenu() {
-    if ( $('#register').text() === 'Regístrate' && $('#menu-inicio-sesion').text() === 'Inicia Sesión' ) {
+    if ($('#register').text() === 'Regístrate' && $('#menu-inicio-sesion').text() === 'Inicia Sesión') {
         $('#menu-inicio-sesion').text('Nombre de usuario');
         $('#register').text('Cerrar Sesión');
     } else {
