@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,8 +41,15 @@
                 <a class="c-menu__option c-menu__option--selected" id="menu-inicio"><i
                         class="c-menu__icon fas fa-home"></i>Inicio</a>
                 <a class="c-menu__option"><i class="c-menu__icon fas fa-address-card"></i>Sobre nosotros</a>
-                <a class="c-menu__option c-menu__option--right" id="iniciosesion" data-toggle="modal" data-target="#modalLoginForm"></a>
+                <a class="c-menu__option c-menu__option--right" id="iniciosesion" data-toggle="modal"
+                    data-target="#modalLoginForm"></a>
                 <a class="c-menu__option" id="register"></a>
+
+                <a class="c-menu__option c-menu__option--icon" id="menu-shopping-cart">
+                    <span class="fa-stack fa-2x has-badge fa-stack--custom" number-of-items="0" id="shopping-cart-icon">
+                        <i class="fa fa-shopping-cart fa-shopping-cart--custom"></i>
+                    </span>
+                </a>
             </div>
         </div>
         <div class="l-page__left">
@@ -91,48 +99,71 @@
                         <i class="c-modal__close-icon fas fa-times"></i>
                     </div>
                     <div class="c-modal__content">
-                        <form class="c-form" id="formulario-registro" name='form-registro' enctype="multipart/form-data">
+                        <form class="c-form" id="formulario-registro" name='form-registro'
+                            enctype="multipart/form-data">
                             <p class="c-form__text-error">Debes introducir un nombre</p>
-                            <input class="c-form__input" input-form="INPUT_NAME" type="text" placeholder="Nombre"/>
+                            <input class="c-form__input" input-form="INPUT_NAME" type="text" placeholder="Nombre" />
                             <p class="c-form__text-error">Debes introducir un email</p>
-                            <input class="c-form__input" input-form="INPUT_EMAIL" type="text" placeholder="Email"/>
+                            <input class="c-form__input" input-form="INPUT_EMAIL" type="text" placeholder="Email" />
                             <p class="c-form__text-error">Debes introducir una contraseña</p>
-                            <input class="c-form__input" input-form="INPUT_PASSWORD1" type="password" placeholder="Contraseña"/>
+                            <input class="c-form__input" input-form="INPUT_PASSWORD1" type="password"
+                                placeholder="Contraseña" />
                             <p class="c-form__text-error">Debes introducir una contraseña</p>
-                            <input class="c-form__input" input-form="INPUT_PASSWORD2" type="password" placeholder="Repite Contraseña"/>
+                            <input class="c-form__input" input-form="INPUT_PASSWORD2" type="password"
+                                placeholder="Repite Contraseña" />
                             <p class="c-form__text-error">Debes introducir un dni</p>
-                            <input class="c-form__input" input-form="INPUT_DNI" type="text" placeholder="DNI"/>
-                            <input class="c-form__input" input-form="INPUT_FILE" type="file"/>
-                            <button class="c-form__button" id="boton-registrar" type="button" disabled="disabled">Registrar</button>
+                            <input class="c-form__input" input-form="INPUT_DNI" type="text" placeholder="DNI" />
+                            <input class="c-form__input" input-form="INPUT_FILE" type="file" />
+                            <button class="c-form__button" id="boton-registrar" type="button"
+                                disabled="disabled">Registrar</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <!--/////////////////////////// MODAL SERVICIOS //////////////////////////////////////////////-->
-            <div class="modal fade" id="modalServicios" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLongTitle"></h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+
+            <div class="c-modal" id="modal-shopping-cart">
+                <div class="c-modal__background"></div>
+                <div class="c-modal__window c-modal__window--large">
+                    <div class="c-modal__header">
+                        <h3 class="c-modal__title">Mi carrito de la compra</h3>
+                        <i class="c-modal__close-icon fas fa-times"></i>
                     </div>
-                    <div class="modal-body-servicio">
-                      <div>
-                        
-            
-                      </div>
-                        
+                    <div class="c-modal__content">
+                        <div id="my-shopping-cart" class="cart">
+                            <div class="cart-item">
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                      <button type="button" class="btn btn-primary" id="anyadir-carrito">Añadir al carrito</button>
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <!--///////////////////////////////////////////////////////////////////////////////////////////-->
+            </div>
+
+            <!--/////////////////////////// MODAL SERVICIOS //////////////////////////////////////////////-->
+            <div class="modal fade" id="modalServicios" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body-servicio">
+                            <div>
+
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="anyadir-carrito">Añadir al
+                                carrito</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--///////////////////////////////////////////////////////////////////////////////////////////-->
         </div>
         <div class="l-columns__area">
             <div class="c-section">
@@ -177,4 +208,5 @@
     </div>
     </div>
 </body>
+
 </html>

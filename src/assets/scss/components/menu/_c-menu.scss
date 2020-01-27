@@ -32,6 +32,17 @@
             margin-left: auto;
         }
 
+        &--avatar {
+            width: 65px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
+        &--icon {
+            padding: 0;
+        }
     }
 
 }

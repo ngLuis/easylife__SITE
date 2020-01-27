@@ -1,0 +1,104 @@
+/**
+ * Vista de detalles del carrito de compra
+ */ 
+.cart {
+    margin: 30px 0;
+
+    &__item {
+        display: flex;
+        padding: 20px 30px;
+        border-bottom: 1px dashed $texto;
+
+        @if $debug {
+            border: 1px solid red;
+        }        
+    }
+
+    &__column {
+        min-width: 80px;
+
+        @if $debug {
+            border: 1px solid blue;
+        }
+
+        &--separated{
+            margin-left: auto;
+        }
+
+        &--price{
+            min-width: 80px;
+            text-align: right;
+        }        
+    }
+
+    &__summary {
+        padding: 30px;
+        text-align: right;
+
+        & > span {
+            margin-left: 20px;
+        }        
+    }
+
+    &__footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__button {
+        width: 30px;
+        height: 30px;
+        margin: 0 10px;
+    
+        background-color: #E1E8EE;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+    
+        &--transparent{
+            background-color: transparent;
+            border: none;
+            outline: none; // outline: borde al hacer click
+        }
+    }
+}
+
+/**
+ * Icono del carrito del top-menu
+ */ 
+// Modificador para el contenedor del icono (sin editar el de font-awesome)
+.fa-stack--custom {
+    text-align: center;
+}
+
+// Modificador para el icono (sin editar el de font-awesome)
+.fa-shopping-cart--custom {
+    color: $texto;
+}
+
+// Clase para el círculito con la cantidad de items del carro
+.fa-stack[number-of-items]:after{
+    // Posición
+    position: absolute;
+    right: 10%;
+    top: 5%;
+
+    // Forma y tamaño
+    line-height: .4em;
+    font-size: .4em;
+    padding: .6em;
+
+    // Bordes
+    border: 0.15em solid $texto;
+    border-radius: 50%; // (un círculo)
+
+    // Contenido
+    content: attr(number-of-items);
+    text-align: center;
+    font-weight: bold;
+
+   // Colores
+    color: $texto;
+    background: $menu-color;
+}

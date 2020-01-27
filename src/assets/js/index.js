@@ -1,6 +1,7 @@
 import { informacion, volver } from '../scss/components/asistente/animation.js';
 import { menu } from '../scss/components/menu/c-menu.js';
 import { setListenersModal } from '../scss/components/modal/c-modal.js';
+import { updateShoppingCartIcon, pintarCarrito, setListenersShoppingCart } from '../scss/components/cart/c-cart.js';
 import { Carrito } from './Classes/Carrito.js';
 import { Servicio } from './Classes/Servicio.js';
 import { FormValidator } from './Classes/FormValidator.js';
@@ -101,6 +102,7 @@ $(function () {
             setListenersMenu();
             setListenersModal();
             setListenersModalElements();
+            setListenersShoppingCart(carrito);
             setListenerModalServicio();
         })
         .fail(function (xhr) {
@@ -112,12 +114,11 @@ $(function () {
 function defaultMenu() {
     let iniSesion = $('<i/>').addClass('c-menu__icon fas fa-sign-in-alt');
     $('#iniciosesion').append(iniSesion);
-    $('#iniciosesion').append('Inicio Sesión');
+    $('#iniciosesion').append('Iniciar sesión');
     let regist = $('<i/>').addClass('c-menu__icon fas fa-user-plus');
     $('#register').append(regist);
     $('#register').append('Regístrate');
 }
-
 
 function cargarPaginaInicio() {
     $('#contenido').empty();
@@ -208,23 +209,27 @@ function pintarMenuUser(name, image) {
     btnLogin.html(name);
     btnLogin.removeAttr("data-toggle");
     btnLogin.removeAttr("data-target")
-    btnRegister.html("Cerrar sesion");
+    btnRegister.html("Cerrar sesión");
     btnRegister.attr("id", "logout")
     logoutSesion();
 }
 
 function refreshMenu() {
     let miTokenStorage = localStorage.getItem("access_token");
-        $.ajax({
-            url: $baseURL + 'auth/me?token=' + miTokenStorage,
-            type: 'POST',
-            dataType: 'json',
-        }).done(function (response) {
-            pintarMenuUser(response.name, response.image);
-            
-        }).fail(function (response) {
-            console.log("Algo ha fallado");
-        })
+    $.ajax({
+        url: $baseURL + 'auth/me?token=' + miTokenStorage,
+        type: 'POST',
+        dataType: 'json',
+    }).done(function (response) {
+        pintarMenuUser(response.name, response.image);
+
+        //Guardamos datos del usuario en el localStorage y su ID en el carrito
+        localStorage.setItem('datosUsuario', JSON.stringify(response));
+        console.log("Guardado datos de usuario en localStorage: ", localStorage.getItem('datosUsuario'));
+        carrito.setUserID(response.id);
+    }).fail(function (response) {
+        console.log("Algo ha fallado");
+    })
 }
 
 function logoutSesion() {
@@ -414,8 +419,15 @@ function cargarModal(servicio) {
 
 function setListenerModalServicio() {
     $('#anyadir-carrito').on('click', function () {
-        carrito.addServicio(servicioSeleccionado);
         $("#modalServicios").modal("hide");
+        // Si está logueado, añadimos al carrito. Si no, redirigimos a login
+        //TODO Ahora mismo redirige a registro, cuando adapten el modal de Login poner el del login
+        if (localStorage.getItem("access_token") != null) {
+            carrito.addServicio(servicioSeleccionado);
+            updateShoppingCartIcon(carrito);
+        } else {
+            showModal('registro');
+        }
     });
 }
 
@@ -485,6 +497,9 @@ function setListenersButtonsMenu() {
             } else {
                 cambiarValoresMenu();
             }
+        } else if (id === 'menu-shopping-cart') {
+            pintarCarrito(carrito);
+            showModal('modal-shopping-cart');
         }
     })
 }
