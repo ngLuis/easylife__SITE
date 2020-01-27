@@ -1,0 +1,8 @@
+.g--display-none {
+    display: none;
+        @media (max-width: 500px) {
+            &\@movil {
+                display: none;
+            }
+        }
+}

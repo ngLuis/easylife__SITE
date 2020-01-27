@@ -132,7 +132,7 @@ function cargarPaginaInicio() {
 
 function cargarCarousel() {
     let lColumns = $('#l-columns-contenido');
-    let lColumnsArea = $('<div/>').addClass('l-columns__area');
+    let lColumnsArea = $('<div/>').addClass('l-columns__area g--display-none@movil');
     let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xl c-section--padding-horizontal-xs');
     let sectionContent = $('<div/>').addClass('c-section__content');
     let carouselContainer = $('<div/>').addClass('carousel slide').attr({
@@ -183,7 +183,7 @@ function cargarCartasSection() {
     let section = $('<div/>').addClass('c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-m');
     let sectionTitle = $('<h1/>').addClass('c-section__title').text('Categorías');
     let sectionContent = $('<div/>').addClass('c-section__content');
-    let lColumnsCartas = $('<div/>').addClass('l-columns l-columns--3-columns').attr('id', 'cartas');
+    let lColumnsCartas = $('<div/>').addClass('l-columns l-columns--3-columns l-columns--movil-1-columns').attr('id', 'cartas');
 
     section.append(sectionTitle);
     sectionContent.append(lColumnsCartas);
