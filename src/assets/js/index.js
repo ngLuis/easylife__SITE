@@ -14,7 +14,7 @@ let serviciosActuales;
 let carrito = new Carrito();
 let formValidator = new FormValidator();
 let servicioSeleccionado;
-const $baseURL = "http://localhost/api/public/api/";
+const BASEURL = "http://localhost/api/public/api/";
 /* const miToken */
 let content = $(".l-page__right");
 let carrousel = $(".c-section__content");
@@ -31,7 +31,7 @@ $(function () {
         let emailData = $("#defaultForm-email")[0].value;
         let passwordData = $("#defaultForm-pass")[0].value;
         $.ajax({
-            url: $baseURL + 'auth/login',
+            url: BASEURL + 'auth/login',
             type: 'POST',
             dataType: 'json',
             data: {
@@ -59,13 +59,13 @@ $(function () {
 })
 
 let peticionCategorias = $.ajax({
-    url: $baseURL + 'categoria',
+    url: BASEURL + 'categoria',
     method: 'GET',
     dataType: 'json'
 });
 
 let peticionCarrusel = $.ajax({
-    url: $baseURL + 'carousel',
+    url: BASEURL + 'carousel',
     type: "GET",
     dataType: "json"
 });
@@ -222,14 +222,20 @@ function pintarMenuUser(name, image) {
 function refreshMenu() {
     let miTokenStorage = localStorage.getItem("access_token");
     $.ajax({
-        url: $baseURL + 'auth/me?token=' + miTokenStorage,
+        url: BASEURL + 'auth/me?token=' + miTokenStorage,
         type: 'POST',
         dataType: 'json',
     }).done(function (response) {
         pintarMenuUser(response.name, response.image);
-        carrito.setUserID(response.id);
     }).fail(function (response) {
-        console.log("Algo ha fallado");
+        console.log("Token - Error de autenticación con el token de localStorage. Posiblemente haya caducado");
+        console.log("Token - Más información: ", response);
+        if (response.status === 401) {
+            alert("¡Tu sesión ha caducado! Por favor, vuelve a iniciar sesión.");
+            localStorage.clear();
+        }
+        // Cargamos el menú de usuarios sin autentificar
+        defaultMenu();
     })
 }
 
@@ -239,7 +245,7 @@ function logoutSesion() {
 
     btnLogout.on("click", function () {
         $.ajax({
-            url: $baseURL + 'auth/logout?token=' + miTokenStorage,
+            url: BASEURL + 'auth/logout?token=' + miTokenStorage,
             type: 'POST',
             dataType: 'json',
         }).done(function (respuestaLogout) {
@@ -349,7 +355,7 @@ function setListenersItemsSidebar() {
 
 function mostrarServicios(idCategoria) {
     $.ajax({
-        url: $baseURL + 'categoria/' + idCategoria + '/servicio',
+        url: BASEURL + 'categoria/' + idCategoria + '/servicio',
         dataType: 'json',
         type: 'GET',
     }).done((response) => {
@@ -523,7 +529,7 @@ function registrarUsuario() {
 
     // //Abajo añadir processData: false
     $.ajax({
-        url: $baseURL + 'auth/register',
+        url: BASEURL + 'auth/register',
         type: 'POST',
         data: userForm,
         processData: false,
