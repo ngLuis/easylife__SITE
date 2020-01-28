@@ -1,4 +1,4 @@
-const $baseURL = "http://localhost/api/public/api/";
+import { BASEURL, hideModal } from '../../../js/index.js';
 
 /**
  * Actualiza el número de items en el icono del carro del menú superior
@@ -117,31 +117,55 @@ function showFullShoppingCart(carrito) {
 function setListenersShoppingCart(carrito) {
     //TODO Cambiar cuando esté la nueva estructura BBDD para que no inserte X registros sin relacionar haciendo X peticiones AJAX.
     $("#my-shopping-cart").on("click", "#btn-confirmarCompra", function (event) {
+
+        // Creamos un objeto json con la información de los servicios adquiridos para almacenar en la BBDD. 
+        let serviciosIngresarBBDD = [];
+        let userID = JSON.parse(localStorage.getItem('datosUsuario')).id;
+
+        console.log("Carrito - el ID user será ", userID);
+
         $.each(carrito.servicios, (index, s) => {
-            let serviceID = s.id;
+            let info = {
+                "id": s.id,
+                "cant": s.unidades
+            };
 
-            for (let i = 1; i <= s.unidades; i++) {
-
-                let compraJson = {
-                    servicio_id: serviceID,
-                    user_id: carrito.userID,
-                    tipo: "compra"
-                };
-
-                $.ajax({
-                    url: $baseURL + "compra",
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(compraJson)
-                })
-                    .done(response => {
-                        console.log("OK, compra insertada correctamente", response);
-                    })
-                    .fail(response => {
-                        console.log("ERROR al insertar la compra", response);
-                    });
-            }
+            serviciosIngresarBBDD.push(info);
         });
+
+        // estado: 0 (compra a mitad; pendiente), 1 (compra completa).
+        let compraJson = {
+            user_id: userID,
+            estado: 1, // 1 porque le han dado a confirmar compra.
+            servicios: JSON.stringify(serviciosIngresarBBDD)
+        };
+
+        console.log("Carrito - Datos a pasar por POST", JSON.stringify(compraJson));
+
+        $.ajax({
+            url: BASEURL + "carrito",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(compraJson)
+        })
+            .done(response => {
+                console.log("Carrito - OK, compra insertada correctamente", response);
+
+                // Cerramos el modal
+                hideModal("modal-shopping-cart");
+
+                // Avisamos del éxito al usuario //REVIEW poner algo más bonito
+                alert("Tu compra se ha completado correctamente :)");
+
+                // Limpiamos el carrito
+                carrito.limpiarServicios();
+                updateShoppingCartIcon(carrito);
+            })
+            .fail(response => {
+                // Avisamos del error al usuario
+                alert("Vaya! Ha habido un error con tu compra. Nos pondremos en contacto contigo.")
+                console.log("Carrito - ERROR al insertar la compra", response);
+            });
     });
 
     $("#my-shopping-cart").on("click", ".btn-delete", function (event) {
@@ -173,3 +197,35 @@ function setListenersShoppingCart(carrito) {
 
 // Exportamos nuestras funciones externas para usarlas desde index.js
 export { updateShoppingCartIcon, pintarCarrito, setListenersShoppingCart };
+
+
+// FORMA ANTIGUA: Dejarla comentada por si tenemos que volver a ella.
+        // Con esta forma se hacen n peticiones Ajax por cada servicio/unidades comprado. 
+        // No se puede controlar bien cuando terminan todas las peticiones, y además no están agrupadas.
+/*
+$.each(carrito.servicios, (index, s) => {
+    let serviceID = s.id;
+
+    for (let i = 1; i <= s.unidades; i++) {
+
+        let compraJson = {
+            servicio_id: serviceID,
+            user_id: carrito.userID,
+            tipo: "compra"
+        };
+
+        $.ajax({
+            url: $baseURL + "compra",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(compraJson)
+        })
+            .done(response => {
+                console.log("OK, compra insertada correctamente", response);
+            })
+            .fail(response => {
+                console.log("ERROR al insertar la compra", response);
+            });
+    }
+});
+*/

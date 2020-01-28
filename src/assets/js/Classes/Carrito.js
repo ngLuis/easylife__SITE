@@ -8,6 +8,10 @@ export class Carrito {
         this.servicios = [];
     }
 
+    /**
+     * Establece el usuario relacionado. 
+     * //NOTE Por ahora no se usa porque accedemos directamente al localStorage.
+     */
     setUserID(userID) {
         this.userID = userID;
         console.log('Actualizado el usuario del carrito', this);
@@ -104,6 +108,14 @@ export class Carrito {
         return precio;
     }
 
+    /**
+     * Quita todos los servicios del carrito, pero mantiene el usuario
+     */
+    limpiarServicios() {
+        this.servicios = [];
+        console.log("Carrito - Servicios limpiados!", this);
+    }
+
     /*
     //REVIEW pendiente: valorar si compensa guardar en localStorage
         actualizarDatosCarrito() {
@@ -114,4 +126,4 @@ export class Carrito {
             console.log("Carrito actualizado: ", localStorage.getItem('carrito'));
         }
     */
-}
+} // fin clase

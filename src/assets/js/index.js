@@ -47,13 +47,10 @@ $(function () {
             modalForm.modal("hide");
             pintarMenuUser(name, image);
 
-            //Guardamos datos del usuario en el localStorage y su ID en el carrito
-            localStorage.setItem('datosUsuario', JSON.stringify(respuestaSesion.user));
-            console.log("Guardado datos de usuario en localStorage: ", localStorage.getItem('datosUsuario'));
-            carrito.setUserID(respuestaSesion.user.id);
+            guardarDatosUsuario(respuestaSesion);
 
-        }).fail(function () {
-            console.log("algo ha fallado")
+        }).fail(function (error) {
+            console.log("algo ha fallado", error)
         })
     })
 })
@@ -514,6 +511,10 @@ function showModal(modalName) {
     $('#' + modalName).addClass('c-modal--show');
 }
 
+function hideModal(modalName) {
+    $('#' + modalName).removeClass('c-modal--show');
+}
+
 function setListenersModalElements() {
     $('#boton-registrar').on('click', registrarUsuario);
 }
@@ -541,6 +542,7 @@ function registrarUsuario() {
             $(this).parent().parent().parent().parent().removeClass('c-modal--show');
             let image = 'harold.jpg';
             pintarMenuUser($('[input-form="INPUT_NAME"]').val(), response.user.image);
+            guardarDatosUsuario(response);
         })
         .fail((response) => {
             console.log(response);
@@ -559,3 +561,17 @@ function cambiarValoresMenu() {
         $('#register').text('Regístrate');
     }
 }
+
+/**
+ * Guarda los datos del usuario recibidos por el servidor en el localStorage, para acceder fácilmente a ellos.
+ * Se obtiene a través del access_token que devuelve el servidor.
+ */
+function guardarDatosUsuario(tokenResponse) {
+    // Guardamos datos del usuario en el localStorage y su ID en el carrito
+    localStorage.setItem('datosUsuario', JSON.stringify(tokenResponse.user));
+    console.log("Guardado datos de usuario en localStorage: ", localStorage.getItem('datosUsuario'));
+    carrito.setUserID(tokenResponse.user.id); //NOTE por ahora se hace directamente en el Ajax desde el localStorage
+}
+
+// Exportar variables
+export { BASEURL, hideModal };
