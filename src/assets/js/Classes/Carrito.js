@@ -1,35 +1,47 @@
 export class Carrito {
 
     /**
-     * Constructor del carrito: Añade la ID del usuario propietario y un array de servicios vacío
+     * Método estático que recibe un JSON y pasa sus propiedades a un objeto.
+     * Se usará para transformar el objeto de localStorage a un objeto Carrito (sin perder sus métodos)
      */
-    constructor() {
-        this.userID = null;
-        this.servicios = [];
+    static fromJson(myJson) {
+        let myObject = new Carrito();
+
+        Object.assign(myObject, myJson);
+
+        return myObject;
     }
 
     /**
-     * Establece el usuario relacionado. 
-     * //NOTE Por ahora no se usa porque accedemos directamente al localStorage.
+     * Constructor del carrito: Añade la ID del usuario propietario y un array de servicios
      */
-    setUserID(userID) {
+    constructor(userID, servicios) {
         this.userID = userID;
-        console.log('Actualizado el usuario del carrito', this);
+
+        if (servicios == null) {
+            this.servicios = [];
+        } else {
+            this.servicios = servicios;
+        }
     }
 
     /**
      * Añade un servicio al array de servicios del carrito
      */
     addServicio(servicio) {
+        console.log("ADD SERVICIO. THIS ", this);
+        console.log("addservicio:", servicio);
         // Obtenemos el servicio del carrito, en caso de que ya estuviera presente
         let servicioPresente = this.servicios.find(s => s.id == servicio.id);
 
         if (servicioPresente == null) {
             // No estaba, así que añadimos el nuevo servicio:
             this.servicios.push(servicio);
+            console.log("No estaba, ahora servicios es", this.servicios);
         } else {
             // Sí estaba, así que le aumentamos las unidades al anterior
             servicioPresente.unidades++;
+            console.log("Si estaba, ahora servicios es", this.servicios);
         }
     }
 

@@ -1,17 +1,18 @@
 import { informacion, volver } from '../scss/components/asistente/animation.js';
 import { menu } from '../scss/components/menu/c-menu.js';
 import { setListenersModal } from '../scss/components/modal/c-modal.js';
-import { updateShoppingCartIcon, pintarCarrito, setListenersShoppingCart } from '../scss/components/cart/c-cart.js';
+import { guardarCarritoEnLocal, getLocalShoppingCart, updateShoppingCartIcon, pintarCarrito, setListenersShoppingCart, obtenerCarritosUsuario } from '../scss/components/cart/c-cart.js';
 import { Carrito } from './Classes/Carrito.js';
 import { Servicio } from './Classes/Servicio.js';
 import { FormValidator } from './Classes/FormValidator.js';
 
 let categorias;
 let imagenesCarrusel;
+let allServicios;
 let sesionData;
 let miToken;
 let serviciosActuales;
-let carrito = new Carrito();
+let carrito// = new Carrito();
 let formValidator = new FormValidator();
 let servicioSeleccionado;
 const BASEURL = "http://localhost/api/public/api/";
@@ -26,6 +27,28 @@ let startLogin = $("#startLogin");
 let modalForm = $("#modalLoginForm");
 let dataLogin;
 
+let peticionCategorias = $.ajax({
+    url: BASEURL + 'categoria',
+    method: 'GET',
+    dataType: 'json'
+});
+
+let peticionCarrusel = $.ajax({
+    url: BASEURL + 'carousel',
+    type: "GET",
+    dataType: "json"
+});
+
+let peticionServicios = $.ajax({
+    url: BASEURL + 'servicio',
+    method: 'GET',
+    dataType: 'json'
+});
+
+/**
+ * ML yo creo que esto tendría que ir en un setListenersLogin y llamado como el resto
+ * Así solo hay una función de carga en el inicio.
+ */
 $(function () {
     startLogin.on("click", function () {
         let emailData = $("#defaultForm-email")[0].value;
@@ -39,6 +62,8 @@ $(function () {
                 password: passwordData
             }
         }).done(function (respuestaSesion) {
+            console.log("Login - OK, logueado", respuestaSesion);
+
             miToken = respuestaSesion['access_token'];
             localStorage.setItem("access_token", miToken);
             let name = respuestaSesion['user']['name'];
@@ -48,30 +73,23 @@ $(function () {
             pintarMenuUser(name, image);
 
             guardarDatosUsuario(respuestaSesion);
+            obtenerCarritosUsuario();
 
         }).fail(function (error) {
-            console.log("algo ha fallado", error)
+            alert("¡Error! Por favor, revisa tus credenciales.");
+            console.log("Login - se ha producido un error", error);
         })
     })
 })
 
-let peticionCategorias = $.ajax({
-    url: BASEURL + 'categoria',
-    method: 'GET',
-    dataType: 'json'
-});
-
-let peticionCarrusel = $.ajax({
-    url: BASEURL + 'carousel',
-    type: "GET",
-    dataType: "json"
-});
 
 $(function () {
-    $.when(peticionCategorias, peticionCarrusel)
-        .done(function (respuestaCategoria, respuestaCarrusel) {
+    $.when(peticionCategorias, peticionCarrusel, peticionServicios)
+        .done(function (respuestaCategoria, respuestaCarrusel, respuestaServicios) {
             categorias = respuestaCategoria[0];
             imagenesCarrusel = respuestaCarrusel[0];
+            allServicios = respuestaServicios[0].data;
+            console.log("Guardamos estos servicios para usar desde otras clases:", allServicios);
 
             let categoriasReady = false;
             let imagesReady = false;
@@ -104,8 +122,9 @@ $(function () {
             setListenersMenu();
             setListenersModal();
             setListenersModalElements();
-            setListenersShoppingCart(carrito);
+            setListenersShoppingCart();
             setListenerModalServicio();
+
         })
         .fail(function (xhr) {
             console.log("ERROR del servidor: " + xhr.status + "(" + xhr.statusText + ")");
@@ -224,6 +243,8 @@ function refreshMenu() {
         dataType: 'json',
     }).done(function (response) {
         pintarMenuUser(response.name, response.image);
+        obtenerCarritosUsuario();
+
     }).fail(function (response) {
         console.log("Token - Error de autenticación con el token de localStorage. Posiblemente haya caducado");
         console.log("Token - Más información: ", response);
@@ -255,10 +276,6 @@ function logoutSesion() {
             console.log("Algo ha fallado");
         })
     });
-
-
-
-
 }
 
 function cargarCartas() {
@@ -403,7 +420,6 @@ function addListenersServicios() {
     });
 }
 
-
 function cargarModal(servicio) {
     $(".modal-body-servicio").empty();
     $(".modal-title").empty();
@@ -427,13 +443,19 @@ function setListenerModalServicio() {
         // Si está logueado, añadimos al carrito. Si no, redirigimos a login
         //TODO Ahora mismo redirige a registro, cuando adapten el modal de Login poner el del login
         if (localStorage.getItem("access_token") != null) {
-            carrito.addServicio(servicioSeleccionado);
-            updateShoppingCartIcon(carrito);
+            let micarrito = getLocalShoppingCart();
+            console.log("modalservicio; este esel carrito", micarrito);
+            micarrito.addServicio(servicioSeleccionado);
+            guardarCarritoEnLocal(micarrito);
+            updateShoppingCartIcon(micarrito);
         } else {
             showModal('registro');
         }
     });
 }
+
+//TODO mover a JS de carrito
+
 
 function mostrarErrorDatos(json) {
     console.log("ERROR al obtener los datos: " + json.status + "(" + json.code + "). Revisar si hay datos en la BBDD");
@@ -502,7 +524,7 @@ function setListenersButtonsMenu() {
                 cambiarValoresMenu();
             }
         } else if (id === 'menu-shopping-cart') {
-            pintarCarrito(carrito);
+            pintarCarrito();
             showModal('modal-shopping-cart');
         }
     })
@@ -518,6 +540,7 @@ function hideModal(modalName) {
 function setListenersModalElements() {
     $('#boton-registrar').on('click', registrarUsuario);
 }
+
 
 function registrarUsuario() {
     const userForm = new FormData();
@@ -543,6 +566,7 @@ function registrarUsuario() {
             let image = 'harold.jpg';
             pintarMenuUser($('[input-form="INPUT_NAME"]').val(), response.user.image);
             guardarDatosUsuario(response);
+            obtenerCarritosUsuario();//ML
         })
         .fail((response) => {
             console.log(response);
@@ -570,8 +594,7 @@ function guardarDatosUsuario(tokenResponse) {
     // Guardamos datos del usuario en el localStorage y su ID en el carrito
     localStorage.setItem('datosUsuario', JSON.stringify(tokenResponse.user));
     console.log("Guardado datos de usuario en localStorage: ", localStorage.getItem('datosUsuario'));
-    carrito.setUserID(tokenResponse.user.id); //NOTE por ahora se hace directamente en el Ajax desde el localStorage
 }
 
 // Exportar variables
-export { BASEURL, hideModal };
+export { allServicios, BASEURL, hideModal };
