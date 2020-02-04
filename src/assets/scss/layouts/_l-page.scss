@@ -22,4 +22,31 @@
     &__footer{
         grid-area: footer;
     }
+    
+}
+
+@media(max-width:500px) {
+
+    .l-page{
+        display: block;
+    
+        grid-template-areas: "top"
+                            "content"
+                            "footer";
+    
+        // grid-template-columns: .3fr 1.7fr;
+    
+        &__top{
+            grid-area: top;
+        }
+    
+        &__left{
+            grid-area: content;
+        }
+    
+        &__footer{
+            grid-area: footer;
+        }
+        
+    } 
 }

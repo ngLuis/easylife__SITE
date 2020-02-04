@@ -1,48 +1,92 @@
-.c-menu{
+.c-menu {
+  @include crearPadding();
+  @include crearMargin();
+  background-color: $menu-color;
+  display: flex;
+  flex-flow: row;
+
+  @media (max-width: 500px) {
+    @include crearPaddingMovil();
+  }
+
+  &__option {
     @include crearPadding();
     @include crearMargin();
-    background-color: $menu-color;
-    display: flex;
-    flex-flow: row;
-
-    &__option {
-        @include crearPadding();
-        @include crearMargin();
-        padding: 20px;
-        height: 100%;
-        color: $texto !important;
-        font-family: $font;
-        user-select: none;
-        
-        &:hover {
-            background-color: $texto-hover;
-            cursor: pointer;
-        }
-
-        &--selected {
-            background-color: $color-destacado;
-            color: white !important;
-
-            &:hover {
-                background-color: lighten($color-destacado, 10%);
-            }
-        }
-
-        &--right {
-            margin-left: auto;
-        }
-
-        &--avatar {
-            width: 65px;
-            padding-top: 0px;
-            padding-bottom: 0px;
-            margin-top: 0px;
-            margin-bottom: 0px;
-        }
-
-        &--icon {
-            padding: 0;
-        }
+    padding: 20px;
+    height: 100%;
+    color: $texto !important;
+    font-family: $font;
+    user-select: none;
+    @media (max-width: 500px) {
+      padding: 5px;
+      height: 35px;
+      line-height: 25px;
+    }
+    &:hover {
+      background-color: $texto-hover;
+      cursor: pointer;
     }
 
+    &--selected {
+      background-color: $color-destacado;
+      color: white !important;
+
+      &:hover {
+        background-color: lighten($color-destacado, 10%);
+      }
+    }
+
+    &--right {
+      margin-left: auto;
+      @media (max-width: 500px) {
+        padding-right: 10px;
+      }
+    }
+
+    &--icon {
+      padding: 0;
+      @media (max-width: 500px) {
+        height: 35px;
+        width: 35px;
+      }
+    }
+
+    &--image {
+      padding: 0px;
+      @media (max-width: 500px) {
+        height: 35px !important;
+        width: 35px !important;
+        padding: 0px !important;
+      }
+    }
+
+    &--caja-image{
+      @media (max-width: 500px) {
+        padding: 0px;
+      }
+    }
+  }
+
+  &__icon {
+    margin-right: 5px;
+  }
+  @media (max-width: 500px) {
+    &__number\@movil {
+      width: 0 !important;
+      font-size: 25px !important;
+      line-height: 35px !important;
+      right: -2px;
+      &::after {
+        left: 14px !important;
+        top: 2px !important;
+        line-height: 0 !important;
+        font-size: 8px !important;
+        padding: 6px !important;
+      }
+    }
+
+    &__cart\@movil {
+      font-size: 25px;
+    }
+  }
 }

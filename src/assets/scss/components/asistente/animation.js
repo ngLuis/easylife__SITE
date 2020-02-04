@@ -3,7 +3,7 @@
 function informacion() {
 
     setTimeout(function () {
-        $(".c-asistente").addClass("c-asistente--mostrar");
+        $(".c-asistente").addClass("c-asistente--mostrar c-asistente--mostrar@movil");
     }, 15000);
 
 

@@ -1,72 +1,82 @@
-.c-asistente{
-    position: fixed; 
-    bottom: 5%;
-    right: 3%;
-    visibility: hidden;
-    width: 320px;
-    height: 320px;
-    border: 2px solid $color-destacado;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    background-image: url("imgs/fondo-asistente.jpg");
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
-    border-radius: 5px;
-    padding: 15px;
-    text-align: center;
-    z-index: 100;
+.c-asistente {
+  position: fixed;
+  bottom: 5%;
+  right: 3%;
+  visibility: hidden;
+  width: 320px;
+  height: 320px;
+  border: 2px solid $color-destacado;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  background-image: url("imgs/fondo-asistente.jpg");
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 15px;
+  text-align: center;
+  z-index: 100;
 
-    &__imagen {
+  &__imagen {
     border-radius: 10px;
     border: 2px solid $color-destacado;
-      box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
-    }   
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+  }
 
-    &__cabecera {
-        border-radius: 5px;
+  &__cabecera {
+    border-radius: 5px;
 
-       /*  background-color:#0093BB; */
-       background-color: $color-destacado;
-        color: white; 
-        font-size: 16px;
-        padding: 0px;
-        margin: 0px;
-        border: 2px solid $color-destacado;
-    }
+    /*  background-color:#0093BB; */
+    background-color: $color-destacado;
+    color: white;
+    font-size: 16px;
+    padding: 0px;
+    margin: 0px;
+    border: 2px solid $color-destacado;
+  }
 
-    &__texto {
-        font-size: 16px;
-         color: black;
-       
-    }
+  &__texto {
+    font-size: 16px;
+    color: black;
+  }
 
-    &__cerrar {
+  &__cerrar {
     font-size: 20px;
-    display:block;
+    display: block;
     line-height: 16px;
     text-align: right;
-    color:#606B32;
-    transition: .1s ease all;
-    }
+    color: #606b32;
+    transition: 0.1s ease all;
+  }
 
-    &__cerrar:hover{
-        color:#740a16;
-        cursor: pointer;
-    }
-       &--mostrar {
-    visibility: visible; 
+  &__cerrar:hover {
+    color: #740a16;
+    cursor: pointer;
+  }
+  &--mostrar {
+    visibility: visible;
     animation-name: mover;
     animation-duration: 3s;
+    @media (max-width: 500px) {
+      &\@movil {
+        visibility: hidden;
+      }
     }
-
+  }
 }
 
+// @media (max-width: 500px) {
+//   .c-asistente {
+//     &--mostrar {
+//       visibility: hidden;
+//     }
+//   }
+// }
 
 @keyframes mover {
-    from { 
-        right: -200px;
-    }
-    to {
-        right: 3%;
-    }
-} 
+  from {
+    right: -200px;
+  }
+  to {
+    right: 3%;
+  }
+}

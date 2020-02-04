@@ -1,18 +1,115 @@
-.c-list{
-    font-family: $font;
-    padding: 30px;
-    color: darken($color-destacado, 30%);
-    &--border-right{
-        border-right: 1px solid darken($color-destacado, 30%);  }
-    &--margin-top{
-        margin-top: 25px;
-    } 
-    &__title{
-        font-size: 25px;
-        font-weight: bold;
-        margin-bottom: 5px;
+.c-list {
+  font-family: $font;
+  padding: 30px;
+  color: darken($color-destacado, 30%);
+  @media (max-width: 500px) {
+    padding: 0;
+    width: 100%;
+  }
+  &--border-right {
+    border-right: 1px solid darken($color-destacado, 30%);
+  }
+
+  &--border-right-none {
+    border-right: 0;
+  }
+
+  @media (max-width: 500px) {
+  &--border-right\@movil {
+    border-right: 1px solid darken($color-destacado, 30%);
+  }
+
+  &--border-right-none\@movil {
+    border-right: 0;
+  }
+  }
+
+
+  &--margin-top {
+    margin-top: 25px;
+  }
+
+  &--margin-top-none{
+    margin-top: 0;
+  }
+
+  
+  @media (max-width: 500px) {
+    &--margin-top\@movil {
+      margin-top: 25px;
     }
-    &__option{
-        line-height: 25px;
+  
+    &--margin-top-none\@movil{
+      margin-top: 0;
     }
+  }
+
+  &--border-bottom {
+    border-bottom: 1px solid darken($color-destacado, 30%);
+  }
+
+  &--border-bottom-none{
+    border-bottom: 0;
+  }
+
+  @media (max-width: 500px) {
+    &--border-bottom\@movil {
+      border-bottom: 1px solid darken($color-destacado, 30%);
+    }
+
+    &--border-bottom-none\@movil{
+      border-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  &__option {
+    line-height: 25px;
+
+    &--margin-bottom{
+      margin-bottom: 15px;
+    }
+    &--margin-bottom-none{
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 500px) {
+    &--margin-bottom\@movil{
+      margin-bottom: 15px;
+    }
+    &--margin-bottom-none\@movil{
+      margin-bottom: 0;
+      }
+    }
+  }
 }
+
+// @media (max-width: 500px) {
+//   .c-list {
+//       padding: 0;
+//       width: 100%;
+//     &--movil-border-bottom {
+//       border-bottom: 1px solid darken($color-destacado, 30%);
+//     }
+//     &--border-right {
+//       border-right:0;
+//     }
+//     &--margin-top {
+//       margin-top: 0;
+//     }
+//     &__title {
+//       font-size: 20px;
+//       margin-bottom: 5px;
+//     }
+//     &__option {
+//       line-height: 25px;
+//       &--movil-margin-bottom{
+//       margin-bottom: 15px;
+//       }
+//     }
+//   }
+// }

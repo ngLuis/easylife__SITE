@@ -39,6 +39,43 @@ $marginSizes : ("none": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" :
     }
 }
 
+@mixin crearPaddingMovil(){
+    @each $sizeName, $sizeValue in $paddingSizes {
+        &--padding-bottom-#{$sizeName}\@movil {
+            padding-bottom: $sizeValue#{'px'};
+        }
+    
+        &--padding-top-#{$sizeName}\@movil {
+            padding-top: $sizeValue#{'px'};
+        }
+    
+        &--padding-right-#{$sizeName}\@movil {
+            padding-right: $sizeValue#{'%'};
+        }
+    
+        &--padding-left-#{$sizeName}\@movil {
+            padding-left: $sizeValue#{'%'};
+        }
+    
+        &--padding-vertical-#{$sizeName}\@movil {
+            padding-top: $sizeValue#{'px'};
+            padding-bottom: $sizeValue#{'px'};
+        }
+    
+        &--padding-horizontal-#{$sizeName}\@movil {
+            padding-left: $sizeValue#{'%'};
+            padding-right: $sizeValue#{'%'};
+        }
+    
+        &--padding-#{$sizeName}\@movil {
+            padding-top: $sizeValue#{'px'};
+            padding-bottom: $sizeValue#{'px'};
+            padding-left: $sizeValue#{'%'};
+            padding-right: $sizeValue#{'%'};
+        }
+    }
+}
+
 @mixin crearMargin(){
 
     @each $sizeName, $sizeValue in $marginSizes {
@@ -69,6 +106,45 @@ $marginSizes : ("none": 0, "xss": 2, "xs": 5, "s": 10, "m": 15, "l" : 20, "xl" :
         }
 
         &--margin-#{$sizeName}{
+            margin-right: $sizeValue#{'%'};
+            margin-left: $sizeValue#{'%'};
+            margin-top: $sizeValue#{'px'};
+            margin-bottom: $sizeValue#{'px'};
+        }
+
+    }
+}
+
+@mixin crearMarginMovil(){
+
+    @each $sizeName, $sizeValue in $marginSizes {
+
+
+        &--margin-right-#{$sizeName}\@movil{
+            margin-right: $sizeValue#{'%'};
+        }
+        &--margin-left-#{$sizeName}\@movil{
+            margin-left: $sizeValue#{'%'};
+        }
+
+        &--margin-top-#{$sizeName}\@movil{
+            margin-top: $sizeValue#{'px'};
+        }
+        &--margin-bottom-#{$sizeName}\@movil{
+            margin-bottom: $sizeValue#{'px'};
+        }
+
+        &--margin-horizontal-#{$sizeName}\@movil{
+            margin-right: $sizeValue#{'%'};
+            margin-left: $sizeValue#{'%'};
+        }
+
+        &--margin-vertical-#{$sizeName}\@movil{
+            margin-top: $sizeValue#{'px'};
+            margin-bottom: $sizeValue#{'px'};
+        }
+
+        &--margin-#{$sizeName}\@movil{
             margin-right: $sizeValue#{'%'};
             margin-left: $sizeValue#{'%'};
             margin-top: $sizeValue#{'px'};

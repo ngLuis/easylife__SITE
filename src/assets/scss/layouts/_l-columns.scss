@@ -1,21 +1,28 @@
 .l-columns {
-    display: grid;
-    grid-template-columns: repeat(1,1fr);
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
 
-    &__area {
+//   &__area {
+//   }
 
+  @for $i from 1 through 12 {
+    &--#{$i}-columns {
+      grid-template-columns: repeat($i, 1fr);
     }
-
-    @for $i from 1 through 12 {
-
-        &--#{$i}-columns {
-            grid-template-columns: repeat($i, 1fr);
-        }
-
-        @media(max-width: 400px) {
-            &--movil-#{$i}-columns {
-                grid-template-columns: repeat($i, 1fr) !important;
-            }
+    @media (max-width: 500px) {
+      // display: block;
+        &--#{$i}-columns\@movil {
+          grid-template-columns: repeat($i, 1fr) !important;
         }
     }
+  }
 }
+
+// @media (max-width: 500px) {
+//   .l-columns {
+//     display: block;
+//     &--#{$i}-columns\@movil {
+//       grid-template-columns: repeat($i, 1fr);
+//     }
+//   }
+// }

@@ -1,6 +1,6 @@
 .c-section {
     @include crearPadding();
-
+    @media (max-width: 500px) {@include crearPaddingMovil();}
     font-family: $font;
 
     &__title {

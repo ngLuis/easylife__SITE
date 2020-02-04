@@ -3,6 +3,12 @@
     color: $sidebar-color;
     height: 100%; //REVIEW no hace nada por como está ahora mismo el grid de l-page. Revisar cuando suban sus cambios.
 
+    @media(max-width:500px) {
+        &\@movil {
+            display: none;
+        }
+    }
+
     &__item{
         width: 100%;
         padding: 20px 30px;
@@ -19,6 +25,4 @@
         
         margin-left: 15px;
     }
-
-    
 }
