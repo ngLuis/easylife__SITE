@@ -13,6 +13,7 @@ let sesionData;
 let miToken;
 let serviciosActuales;
 let carrito// = new Carrito();
+let serviceDragged;
 let formValidator = new FormValidator();
 let servicioSeleccionado;
 
@@ -364,9 +365,10 @@ function cargarAsistente() {
   let asistenteTexto = $("<p/>")
     .addClass("c-asistente__texto")
     .text("Llámanos al 636 876 856 y te atenderemos personalmente.");
-  let asistenteImagen = $("<img/>")
-    .addClass("c-asitente__imagen")
-    .attr("src", "./assets/img/asistente.jpg");
+    let asistenteImagen = $('<img/>').addClass('c-asitente__imagen').attr({
+      'src': './assets/img/asistente.jpg',
+      'draggable': 'false'
+  });
   let asistenteCerrar = $("<a/>").addClass("c-asistente__cerrar");
   let cerrarIcon = $("<i/>").addClass("far fa-window-close");
 
@@ -451,7 +453,7 @@ function mostrarServicios(idCategoria) {
         .attr("id", "contenedor-articulos");
       $.each(response.data, function(index, value) {
         let lColumnsInsideSectionArea = $("<div/>").addClass("l-columns__area");
-        let articulo = $("<div/>").addClass("c-articulo");
+        let articulo = $("<div/>").addClass("c-articulo").attr('draggable','true');
         let articuloImg = $("<img/>")
           .addClass("c-articulo__image")
           .attr(
@@ -471,6 +473,10 @@ function mostrarServicios(idCategoria) {
             id: "servicio-" + value.id,
             "data-toggle": "modal",
             "data-target": "#modalServicios"
+          });
+
+          articulo.on('dragstart', function(){
+            serviceDragged = parseInt($(this).find('.c-articulo__button').attr('id').split('-')[1]);
           });
 
         articulo.append(articuloImg);
@@ -619,6 +625,26 @@ function setListenersMenu() {
 }
 
 function setListenersButtonsMenu() {
+    $('#menu-shopping-cart').on('dragover', function(event){
+        event.preventDefault();
+    });
+
+    $('#menu-shopping-cart').on('drop', function(){
+        if (localStorage.getItem("access_token") != null) {
+            let servicioAnyadir = allServicios.find( servicio => {
+                if ( servicio.id === parseInt(serviceDragged) ) {
+                    return new Servicio(servicio.id, servicio.nombre, servicio.categoria_id, servicio.precio, servicio.imagen, servicio.descripcion);
+                }
+            });
+            let carrito = getLocalShoppingCart();
+            carrito.addServicio(servicioAnyadir);
+            guardarCarritoEnLocal(carrito);
+            updateShoppingCartIcon(carrito);
+        } else {
+            alert('Debes iniciar sesión para poder comprar');
+            // showModal('registro');
+        }
+    });
     $('.c-menu').on('click', '.c-menu__option', function () {
         let id = $(this).attr('id');
         if (id === 'menu-inicio') {
@@ -683,7 +709,6 @@ function hideModal(modalName) {
 function setListenersModalElements() {
 
     $('#boton-registrar').on('click', registrarUsuario);
-    $('#boton-loguear').on('click', loguearUsuario);
 
 }
 

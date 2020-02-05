@@ -32,10 +32,11 @@ export class Carrito {
         console.log("ADD SERVICIO. THIS ", this);
         console.log("addservicio:", servicio);
         // Obtenemos el servicio del carrito, en caso de que ya estuviera presente
-        let servicioPresente = this.servicios.find(s => s.id == servicio.id);
+        let servicioPresente = this.servicios.find(s => parseInt(s.id) == parseInt(servicio.id));
 
         if (servicioPresente == null) {
             // No estaba, así que añadimos el nuevo servicio:
+            servicio.unidades = 1;
             this.servicios.push(servicio);
             console.log("No estaba, ahora servicios es", this.servicios);
         } else {
@@ -103,8 +104,11 @@ export class Carrito {
         let cantidad = 0;
 
         $.each(this.servicios, (index, s) => {
+            console.log('Estas son las unidades'+s.unidades);
             cantidad += s.unidades;
         })
+
+        console.log('Esta es la cantidad '+cantidad);
 
         return cantidad;
     }
