@@ -15,8 +15,10 @@ let serviciosActuales;
 let carrito// = new Carrito();
 let formValidator = new FormValidator();
 let servicioSeleccionado;
+
 const BASEURL = "http://localhost/api/public/api/";
 /* const miToken */
+
 let content = $(".l-page__right");
 let carrousel = $(".c-section__content");
 
@@ -50,8 +52,9 @@ let peticionServicios = $.ajax({
  */
 $(function () {
     startLogin.on("click", function () {
-        let emailData = $("#defaultForm-email")[0].value;
-        let passwordData = $("#defaultForm-pass")[0].value;
+        let emailData = $(this).parent().prev().find('[input-form="INPUT_EMAIL"]').val();
+        let passwordData = $('[input-form="INPUT_PASSWORD"]').val();
+        
         $.ajax({
             url: BASEURL + 'auth/login',
             type: 'POST',
@@ -67,9 +70,9 @@ $(function () {
             localStorage.setItem("access_token", miToken);
             let name = respuestaSesion['user']['name'];
             let image = respuestaSesion['user']['image'];
-            let modalForm = $("#modalLoginForm");
-            modalForm.modal("hide");
+            $('#modalLoginForm').removeClass('c-modal--show');
             pintarMenuUser(name, image);
+
 
             guardarDatosUsuario(respuestaSesion);
             obtenerCarritosUsuario();
@@ -77,6 +80,7 @@ $(function () {
         }).fail(function (error) {
             alert("¡Error! Por favor, revisa tus credenciales.");
             console.log("Login - se ha producido un error", error);
+
         })
     })
 })
@@ -94,8 +98,7 @@ $(function () {
             let imagesReady = false;
 
             if (categorias.status >= 200 && categorias.status <= 299) {
-                // cargarCartas();
-                // cargarPaginaInicio();
+
                 categoriasReady = true;
                 pintarItemsSidebar();
             } else {
@@ -104,7 +107,7 @@ $(function () {
 
             if (imagenesCarrusel.status >= 200 && imagenesCarrusel.status <= 299) {
                 imagesReady = true;
-                // getImgCarrusel();
+
             } else {
                 mostrarErrorDatos(imagenesCarrusel);
             }
@@ -259,6 +262,7 @@ function pintarMenuUser(name, image) {
 
 function refreshMenu() {
     let miTokenStorage = localStorage.getItem("access_token");
+
     $.ajax({
         url: BASEURL + 'auth/me?token=' + miTokenStorage,
         type: 'POST',
@@ -277,6 +281,8 @@ function refreshMenu() {
         // Cargamos el menú de usuarios sin autentificar
         defaultMenu();
     })
+
+
 }
 
 function logoutSesion() {
@@ -293,11 +299,12 @@ function logoutSesion() {
             localStorage.clear();
             var url = "http://localhost/site";
             $(location).attr('href', url);
-            // cargarPaginaInicio();
+
         }).fail(function () {
-            console.log("Algo ha fallado");
+            console.log("Algo ha fallado en logoutSesion");
         })
     });
+
 }
 
 function cargarCartas() {
@@ -634,18 +641,37 @@ function setListenersButtonsMenu() {
                         $(this).prev().text(message);
                     }
 
-
                     $('#boton-registrar').attr('disabled', formValidator.getButtonState());
                 });
             } else {
                 cambiarValoresMenu();
             }
+
         } else if (id === 'menu-shopping-cart') {
             pintarCarrito();
             showModal('modal-shopping-cart');
+
+        } else if (id === 'iniciosesion') {
+            if($('#iniciosesion').text() === 'Inicio Sesión') {
+                showModal('modalLoginForm');
+                $('#formulario-login').on('keyup', 'input', function () {
+
+                    let inputValue = $(this).val();   
+                    let inputType = $(this).attr('input-form');
+                    let message = formValidator.validateInput(inputType, inputValue);
+                    $(this).prev().prev().text(message);
+
+                    $('#boton-loguear').attr('disabled', formValidator.getButtonStateLogin());
+                });              
+            }
+            else {
+                cambiarValoresMenu();
+            }
+
         }
-    })
+    });
 }
+
 function showModal(modalName) {
     $('#' + modalName).addClass('c-modal--show');
 }
@@ -655,7 +681,10 @@ function hideModal(modalName) {
 }
 
 function setListenersModalElements() {
-  $("#boton-registrar").on("click", registrarUsuario);
+
+    $('#boton-registrar').on('click', registrarUsuario);
+    $('#boton-loguear').on('click', loguearUsuario);
+
 }
 
 
@@ -668,7 +697,7 @@ function registrarUsuario() {
     userForm.append("type", '0');
     userForm.append("avatar", $('[input-form="INPUT_FILE"]')[0].files[0]);
 
-    // //Abajo añadir processData: false
+    // Abajo añadir processData: false
     $.ajax({
         url: BASEURL + 'auth/register',
         type: 'POST',
@@ -694,13 +723,14 @@ function registrarUsuario() {
 }
 
 function cambiarValoresMenu() {
-    if ($('#register').text() === 'Regístrate' && $('#menu-inicio-sesion').text() === 'Inicia Sesión') {
-        $('#menu-inicio-sesion').text('Nombre de usuario');
+    if ($('#register').text() === 'Regístrate' && $('#iniciosesion').text() === 'Inicio Sesión') {
+        $('#iniciosesion').text('Nombre de usuario');
         $('#register').text('Cerrar Sesión');
     } else {
-        $('#menu-inicio-sesion').text('Inicia Sesión');
+        $('#iniciosesion').text('Inicio Sesión');
         $('#register').text('Regístrate');
     }
+
 }
 
 /**
@@ -715,3 +745,5 @@ function guardarDatosUsuario(tokenResponse) {
 
 // Exportar variables
 export { allServicios, BASEURL, hideModal };
+
+

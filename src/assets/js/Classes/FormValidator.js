@@ -2,8 +2,9 @@ export class FormValidator {
 
     regularExpressions = {
         "INPUT_NAME" : /^[A-Za-z]+$/,
-        "INPUT_EMAIL" : /\S+@\S+\.\S+/,
+        "INPUT_EMAIL" : /^\S+@\S+\.\S+$/,
         "INPUT_DNI" : /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]$/,
+        "INPUT_PASSWORD" : "",
         "INPUT_PASSWORD1" : "",
         "INPUT_PASSWORD2" : ""
     }
@@ -12,6 +13,7 @@ export class FormValidator {
     email;
     dni;
     passwords;
+    password;
         
     constructor(){}
 
@@ -54,13 +56,32 @@ export class FormValidator {
             } else {
                 this.passwords = true;
             }
-        }
+        } else if ( inputType === 'INPUT_PASSWORD' ) {
+            if ( inputValue === '' ) {
+                message = 'Debes introducir un password';
+                this.password = false;
+            } else if( inputValue.length < 8 ) {
+                message = "Contraseña de 8 caracteres mínimo";
+                this.password = false;
+            } else {
+                message = "";
+                this.password = true;
+            }
+    }
         return message;
     }
 
     getButtonState() {
         let buttonDisabled = true;
         if ( this.name && this.passwords && this.email && this.dni ) {
+            buttonDisabled = false;
+        }
+        return buttonDisabled;
+    }
+
+    getButtonStateLogin() {
+        let buttonDisabled = true;
+        if( this.password && this.email ) {
             buttonDisabled = false;
         }
         return buttonDisabled;
