@@ -6,13 +6,17 @@ export class Servicio {
     imagen;
     descripcion;
 
-    constructor(id, nombre, idCategoria, precio, imagen, descripcion) {
+    constructor(id, nombre, idCategoria, precio, imagen, descripcion, unidades) {
         this.id = id;
         this.nombre = nombre;
         this.idCategoria = idCategoria;
         this.precio = precio;
         this.imagen = imagen;
         this.descripcion = descripcion;
-        this.unidades = 1;
+        if (unidades == null) {
+            this.unidades = 1;
+        } else {
+            this.unidades = unidades;
+        }
     }
 }

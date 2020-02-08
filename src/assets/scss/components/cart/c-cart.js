@@ -1,5 +1,6 @@
 import { BASEURL, hideModal, allServicios } from '../../../js/index.js';
 import { Carrito } from '../../../js/Classes/Carrito.js';
+import { Servicio } from '../../../js/Classes/Servicio.js';
 
 /**
  * Obtiene del servidor los carritos del usuario. 
@@ -8,28 +9,25 @@ import { Carrito } from '../../../js/Classes/Carrito.js';
 function obtenerCarritosUsuario() {
     let carrito, userID;
 
-    /*console.log("TODOS servicios desde cart", allServicios);*/
-
     userID = JSON.parse(localStorage.getItem('datosUsuario')).id;
 
     $.ajax({
-        url: BASEURL + "user/" + userID + "/carrito",
+        url: BASEURL + "user/" + userID + "/carrito/estado/0",
         type: "GET"
     })
         .done(response => {
-
-            console.log("Carrito - todos los carritos del usuario (finalizados o pendiente)", response);
+            console.log("Carrito - compras pendientes del usuario", response);
 
             // Si hay algun carrito a mitad, lo guarda en el localStorage. Si no, crea uno nuevo.
+            if (response.data.length != 0) {
+                let comprasPendientes = response.data;
+                console.log("El usuario tenía un carrito de compras pendientes. Éstas son las compras", comprasPendientes);
 
-            let carritoPendiente = response.data.reverse().find(c => c.estado === 0);
+                transformDBtoLocalCart(comprasPendientes);
+                carrito = getLocalShoppingCart();
 
-            // Si ha encontrado carrito pendiente (find devuelve undefined si no lo encuentra)...
-            if (carritoPendiente != null) { // == null es equivalente a === undefined || === null
-                console.log("El carrito pendiente es", carritoPendiente);
-                alert("Ojo! Carrito pendiente. Función por implementar cuando esté la API probada");
-                /*carrito = transformDBtoLocalCart(carritoPendiente);*/
             } else {
+                console.log("El usuario no tenia compras pendientes", response.data);
                 console.log("No hay ningún carrito pendiente en la BBDD. Vamos a revisar el localStorage.");
 
                 if (localStorage.getItem('carrito') == null) {
@@ -49,6 +47,7 @@ function obtenerCarritosUsuario() {
             console.log("Carrito - ERROR en la petición de GET carrito según userID", response);
         });
 }
+
 
 
 /**
@@ -278,19 +277,17 @@ function guardarCarritoFinalizadoEnBBDD() {
     serviciosIngresarBBDD = [];
 
     $.each(carrito.servicios, (index, s) => {
-        let info = {
-            "id": s.id,
-            "cant": s.unidades
-        };
+        let info = [s.id, s.unidades];
 
         serviciosIngresarBBDD.push(info);
     });
+    console.log("estos son los servicios a ingresar", serviciosIngresarBBDD);
 
-    // estado: 0 (compra a mitad; pendiente), 1 (compra completa).
     compraJson = {
         user_id: carrito.userID,
         estado: 1, // 1 porque le han dado a confirmar compra.
-        servicios: JSON.stringify(serviciosIngresarBBDD)
+        servicios: serviciosIngresarBBDD
+        //servicios: JSON.stringify(serviciosIngresarBBDD)
     };
 
     console.log("Carrito - Datos a pasar por POST", JSON.stringify(compraJson));
@@ -302,18 +299,23 @@ function guardarCarritoFinalizadoEnBBDD() {
         data: JSON.stringify(compraJson)
     })
         .done(response => {
-            console.log("Carrito - OK, compra insertada correctamente", response);
+            if (response.status == 409) {
+                console.log("Carrito - error interno al comprar. Se debe hacer un PUT al carrito pendiente. Podemos averiguar la ID de laguna formay guardarla en el localstorage a una mala");
+                alert("error compra 409");
+            } else {
+                console.log("Carrito - OK, compra insertada correctamente", response);
 
-            // Cerramos el modal
-            hideModal("modal-shopping-cart");
+                // Cerramos el modal
+                hideModal("modal-shopping-cart");
 
-            // Avisamos del éxito al usuario //REVIEW poner algo más bonito
-            alert("Tu compra se ha completado correctamente :)");
+                // Avisamos del éxito al usuario //REVIEW poner algo más bonito
+                alert("Tu compra se ha completado correctamente :)");
 
-            // Limpiamos el carrito
-            carrito.limpiarServicios();
-            guardarCarritoEnLocal(carrito);
-            updateShoppingCartIcon(carrito);
+                // Limpiamos el carrito
+                carrito.limpiarServicios();
+                guardarCarritoEnLocal(carrito);
+                updateShoppingCartIcon(carrito);
+            }
         })
         .fail(response => {
             // Avisamos del error al usuario
@@ -337,16 +339,31 @@ function getLocalShoppingCart() {
     return carritoObjeto;
 }
 
-/*
-function transformDBtoLocalCart(carritoDB) {
+
+function transformDBtoLocalCart(comprasPendientes) {
+    let idCarritoPendiente;
+    console.log("transformDBtoLocalCart", comprasPendientes);
+
+    // La API nos devuelve un array con todas las compras pendientes. Cada elemento incluye la ID del carrito (que es la misma en todas)
+    idCarritoPendiente = comprasPendientes[0].cart_id;
+    console.log("ID DEL CARRITO PENDIENTE", idCarritoPendiente);
+    localStorage.setItem('idCarritoPendiente', idCarritoPendiente);
+
+
+    let userID = JSON.parse(localStorage.getItem('datosUsuario')).id;
+    let carrito = new Carrito(userID);
+
+    $.each(comprasPendientes, function (index, compra) {
+        console.log("Procesando compra", compra);
+        let nuevoServicio = new Servicio(compra.id, compra.nombre, compra.categoria_id, compra.precio, compra.imagen, compra.descripcion, compra.unidades);
+        carrito.addServicio(nuevoServicio);
+    });
+
     // Guardamos ID del carrito por si luego tenemos que modificarlo con PUT/PATCH
-    localStorage.setItem('idCompraPendiente', carritoDB.id);
+    guardarCarritoEnLocal(carrito);
 
-    alert("Pendiente procesar carrito de BBDD y transformar");
-
-    carritoObjeto = Carrito.fromJson(carritoJson);
 }
-*/
+
 
 // Exportamos nuestras funciones externas para usarlas desde index.js
 export { getLocalShoppingCart, guardarCarritoEnLocal, guardarCarritoFinalizadoEnBBDD, updateShoppingCartIcon, pintarCarrito, setListenersShoppingCart, obtenerCarritosUsuario };

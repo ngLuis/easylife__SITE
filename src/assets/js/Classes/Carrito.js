@@ -29,8 +29,7 @@ export class Carrito {
      * Añade un servicio al array de servicios del carrito
      */
     addServicio(servicio) {
-        console.log("ADD SERVICIO. THIS ", this);
-        console.log("addservicio:", servicio);
+        console.log("addservicio: Vamos a añadir el servicio", servicio, "a este carro", this);
         // Obtenemos el servicio del carrito, en caso de que ya estuviera presente
         let servicioPresente = this.servicios.find(s => parseInt(s.id) == parseInt(servicio.id));
 
@@ -104,11 +103,8 @@ export class Carrito {
         let cantidad = 0;
 
         $.each(this.servicios, (index, s) => {
-            console.log('Estas son las unidades'+s.unidades);
             cantidad += s.unidades;
         })
-
-        console.log('Esta es la cantidad '+cantidad);
 
         return cantidad;
     }
@@ -132,14 +128,4 @@ export class Carrito {
         console.log("Carrito - Servicios limpiados!", this);
     }
 
-    /*
-    //REVIEW pendiente: valorar si compensa guardar en localStorage
-        actualizarDatosCarrito() {
-            // Actualizamos el carrito
-            console.log("Vamos a guardar este carrito", this);
-            localStorage.setItem('carrito', JSON.stringify(this));
-    
-            console.log("Carrito actualizado: ", localStorage.getItem('carrito'));
-        }
-    */
 } // fin clase
