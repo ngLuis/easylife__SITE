@@ -35,7 +35,9 @@ export class Carrito {
 
         if (servicioPresente == null) {
             // No estaba, así que añadimos el nuevo servicio:
-            servicio.unidades = 1;
+            if (servicio.unidades == null) { // para evitar bug de drag and drop
+                servicio.unidades = 1;
+            }
             this.servicios.push(servicio);
             console.log("No estaba, ahora servicios es", this.servicios);
         } else {
@@ -55,7 +57,7 @@ export class Carrito {
             // El servicio estaba, así que lo borramos (i.e., todas las unidades de dicho servicio)
             this.servicios.splice(indexServicio, 1)
         } else {
-            console.log("Situación inesperada: se ha intentado borrar un servicio que ya no estaba en el carrito");
+            console.log("Carrito - Situación inesperada: se ha intentado borrar un servicio que ya no estaba en el carrito");
         }
     }
 
@@ -66,11 +68,13 @@ export class Carrito {
         let indexServicio = this.servicios.findIndex(s => s.id == idServicio);
 
         if (indexServicio != -1) {
-            if (this.servicios[indexServicio].unidades >= 1) {
+            if (this.servicios[indexServicio].unidades > 1) {
                 this.servicios[indexServicio].unidades--;
+            } else {
+                this.borrarServicio(idServicio);
             }
         } else {
-            console.log("Situación inesperada: se ha intentado restar a un servicio que ya no estaba en el carrito");
+            console.log("Carrito - Situación inesperada: se ha intentado restar a un servicio que ya no estaba en el carrito");
         }
     }
 
@@ -85,7 +89,7 @@ export class Carrito {
                 this.servicios[indexServicio].unidades++;
             }
         } else {
-            console.log("Situación inesperada: se ha intentado sumar a un servicio que no estaba en el carrito");
+            console.log("Carrito - Situación inesperada: se ha intentado sumar a un servicio que no estaba en el carrito");
         }
     }
 

@@ -6,6 +6,9 @@ export class Servicio {
     imagen;
     descripcion;
 
+    /**
+     * Constructor de un servicio. Si no nos pasan unidades en el constructor, pondremos 1.
+     */
     constructor(id, nombre, idCategoria, precio, imagen, descripcion, unidades) {
         this.id = id;
         this.nombre = nombre;

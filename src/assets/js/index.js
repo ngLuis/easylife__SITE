@@ -1,7 +1,7 @@
 import { informacion, volver } from '../scss/components/asistente/animation.js';
 import { menu } from '../scss/components/menu/c-menu.js';
 import { setListenersModal } from '../scss/components/modal/c-modal.js';
-import { guardarCarritoEnLocal, getLocalShoppingCart, updateShoppingCartIcon, pintarCarrito, setListenersShoppingCart, obtenerCarritosUsuario } from '../scss/components/cart/c-cart.js';
+import { guardarCarrito, getLocalShoppingCart, pintarCarritoEnSuCapa, setListenersShoppingCart, establecerCarritoActual } from '../scss/components/cart/c-cart.js';
 import { Carrito } from './Classes/Carrito.js';
 import { Servicio } from './Classes/Servicio.js';
 import { FormValidator } from './Classes/FormValidator.js';
@@ -55,7 +55,7 @@ $(function () {
     startLogin.on("click", function () {
         let emailData = $(this).parent().prev().find('[input-form="INPUT_EMAIL"]').val();
         let passwordData = $('[input-form="INPUT_PASSWORD"]').val();
-        
+
         $.ajax({
             url: BASEURL + 'auth/login',
             type: 'POST',
@@ -76,7 +76,7 @@ $(function () {
 
 
             guardarDatosUsuario(respuestaSesion);
-            obtenerCarritosUsuario();
+            establecerCarritoActual();
 
         }).fail(function (error) {
             alert("¡Error! Por favor, revisa tus credenciales.");
@@ -93,7 +93,6 @@ $(function () {
             categorias = respuestaCategoria[0];
             imagenesCarrusel = respuestaCarrusel[0];
             allServicios = respuestaServicios[0].data;
-            console.log("Guardamos estos servicios para usar desde otras clases:", allServicios);
 
             let categoriasReady = false;
             let imagesReady = false;
@@ -145,16 +144,16 @@ function defaultMenu() {
 }
 
 function cargarPaginaInicio() {
-  $("#contenido").empty();
-  let lColumns = $("<div/>")
-    .addClass("l-columns")
-    .attr("id", "l-columns-contenido");
-  $("#contenido").append(lColumns);
-  cargarCarousel();
-  cargarCartasSection();
-  cargarAsistente();
-  informacion();
-  volver();
+    $("#contenido").empty();
+    let lColumns = $("<div/>")
+        .addClass("l-columns")
+        .attr("id", "l-columns-contenido");
+    $("#contenido").append(lColumns);
+    cargarCarousel();
+    cargarCartasSection();
+    cargarAsistente();
+    informacion();
+    volver();
 }
 
 function cargarCarousel() {
@@ -166,77 +165,77 @@ function cargarCarousel() {
         id: 'carouselExampleCaptions',
         'data-ride': 'carousel'
     });
-  let ol = $("<ol/>").addClass("carousel-indicators");
-  let carouselInner = $("<div/>").addClass("carousel-inner");
-  let aPrev = $("<a/>")
-    .addClass("carousel-control-prev")
-    .attr({
-      href: "#carouselExampleCaptions",
-      role: "button",
-      "data-slide": "prev"
+    let ol = $("<ol/>").addClass("carousel-indicators");
+    let carouselInner = $("<div/>").addClass("carousel-inner");
+    let aPrev = $("<a/>")
+        .addClass("carousel-control-prev")
+        .attr({
+            href: "#carouselExampleCaptions",
+            role: "button",
+            "data-slide": "prev"
+        });
+    let spanPrevIcon = $("<span/>")
+        .addClass("carousel-control-prev-icon")
+        .attr("aria-hidden", "true");
+    let spanPrevOnly = $("<span/>")
+        .addClass("sr-only")
+        .text("Previous");
+    let aNext = $("<a/>")
+        .addClass("carousel-control-next")
+        .attr({
+            href: "#carouselExampleCaptions",
+            role: "button",
+            "data-slide": "next"
+        });
+    let spanNextIcon = $("<span/>")
+        .addClass("carousel-control-next-icon")
+        .attr("aria-hidden", "true");
+    let spanNextOnly = $("<span/>")
+        .addClass("sr-only")
+        .text("Next");
+
+    aPrev.append(spanPrevOnly);
+    aPrev.append(spanPrevIcon);
+    aNext.append(spanNextIcon);
+    aNext.append(spanNextOnly);
+    carouselContainer.append(aNext);
+    carouselContainer.append(aPrev);
+    carouselContainer.append(carouselInner);
+    carouselContainer.append(ol);
+    sectionContent.append(carouselContainer);
+    section.append(sectionContent);
+    lColumnsArea.append(section);
+    lColumns.append(lColumnsArea);
+
+    getImgCarrusel();
+
+    $(".carousel").carousel({
+        "data-pause": false,
+        interval: 3000
     });
-  let spanPrevIcon = $("<span/>")
-    .addClass("carousel-control-prev-icon")
-    .attr("aria-hidden", "true");
-  let spanPrevOnly = $("<span/>")
-    .addClass("sr-only")
-    .text("Previous");
-  let aNext = $("<a/>")
-    .addClass("carousel-control-next")
-    .attr({
-      href: "#carouselExampleCaptions",
-      role: "button",
-      "data-slide": "next"
-    });
-  let spanNextIcon = $("<span/>")
-    .addClass("carousel-control-next-icon")
-    .attr("aria-hidden", "true");
-  let spanNextOnly = $("<span/>")
-    .addClass("sr-only")
-    .text("Next");
-
-  aPrev.append(spanPrevOnly);
-  aPrev.append(spanPrevIcon);
-  aNext.append(spanNextIcon);
-  aNext.append(spanNextOnly);
-  carouselContainer.append(aNext);
-  carouselContainer.append(aPrev);
-  carouselContainer.append(carouselInner);
-  carouselContainer.append(ol);
-  sectionContent.append(carouselContainer);
-  section.append(sectionContent);
-  lColumnsArea.append(section);
-  lColumns.append(lColumnsArea);
-
-  getImgCarrusel();
-
-  $(".carousel").carousel({
-    "data-pause": false,
-    interval: 3000
-  });
 }
 
 function cargarCartasSection() {
-  let lColumns = $("#l-columns-contenido");
-  let lColumnsArea = $("<div/>").addClass("l-columns__area");
-  let section = $("<div/>").addClass(
-    "c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-m c-section--padding-horizontal-s@movil c-section--padding-vertical-l@movil"
-  );
-  let sectionTitle = $("<h1/>")
-    .addClass("c-section__title")
-    .text("Servicios");
-  let sectionContent = $("<div/>").addClass("c-section__content");
-  let lColumnsCartas = $("<div/>")
-    .addClass("l-columns l-columns--3-columns l-columns--1-columns@movil")
-    .attr("id", "cartas");
+    let lColumns = $("#l-columns-contenido");
+    let lColumnsArea = $("<div/>").addClass("l-columns__area");
+    let section = $("<div/>").addClass(
+        "c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-m c-section--padding-horizontal-s@movil c-section--padding-vertical-l@movil"
+    );
+    let sectionTitle = $("<h1/>")
+        .addClass("c-section__title")
+        .text("Servicios");
+    let sectionContent = $("<div/>").addClass("c-section__content");
+    let lColumnsCartas = $("<div/>")
+        .addClass("l-columns l-columns--3-columns l-columns--1-columns@movil")
+        .attr("id", "cartas");
 
-  section.append(sectionTitle);
-  sectionContent.append(lColumnsCartas);
-  section.append(sectionContent);
-  lColumnsArea.append(section);
-  lColumns.append(lColumnsArea);
+    section.append(sectionTitle);
+    sectionContent.append(lColumnsCartas);
+    section.append(sectionContent);
+    lColumnsArea.append(section);
+    lColumns.append(lColumnsArea);
 
-  cargarCartas();
+    cargarCartas();
 }
 
 function pintarMenuUser(name, image) {
@@ -246,8 +245,8 @@ function pintarMenuUser(name, image) {
     modalAvatar.attr("id", "miavatar")
     modalAvatar.append(divImgAvatar);
     divImgAvatar.attr(
-      "src",
-      "http://localhost/api/storage/app/public/avatars/" + image
+        "src",
+        "http://localhost/api/storage/app/public/avatars/" + image
     );
     divImgAvatar.addClass("c-menu__option c-menu__option--image c-menu__option--margin-right-m@movil /* g--padding-zero g--margin-zero */");
     divImgAvatar.attr("style", "width:65px; height:65px")
@@ -270,7 +269,7 @@ function refreshMenu() {
         dataType: 'json',
     }).done(function (response) {
         pintarMenuUser(response.name, response.image);
-        obtenerCarritosUsuario();
+        establecerCarritoActual();
 
     }).fail(function (response) {
         console.log("Token - Error de autenticación con el token de localStorage. Posiblemente haya caducado");
@@ -309,121 +308,127 @@ function logoutSesion() {
 }
 
 function cargarCartas() {
-  $.each(categorias.data, function(index, element) {
-    let areaColumna = $("<div>").addClass("l-columns__area");
+    $.each(categorias.data, function (index, element) {
+        let areaColumna = $("<div>").addClass("l-columns__area");
 
-    let componenteCard = $("<div>").addClass("c-card");
+        let componenteCard = $("<div>").addClass("c-card");
 
-    let cardImg = $("<img>")
-      .attr(
-        "src",
-        "http://localhost/api/storage/app/public/categorias/" + element.imagen
-      )
-      .addClass("c-card__img");
+        let cardImg = $("<img>")
+            .attr(
+                "src",
+                "http://localhost/api/storage/app/public/categorias/" + element.imagen
+            )
+            .addClass("c-card__img");
 
-    let cardContenido = $("<div>").addClass("c-card__content");
-    let cardTitulo = $("<h2>")
-      .addClass("c-card__title")
-      .append(element.nombre);
-    let cardDescripcion = $("<h2>")
-      .addClass("c-card__text")
-      .append(element.descripcion);
-    cardContenido.append(cardTitulo);
-    cardContenido.append(cardDescripcion);
+        let cardContenido = $("<div>").addClass("c-card__content");
+        let cardTitulo = $("<h2>")
+            .addClass("c-card__title")
+            .append(element.nombre);
+        let cardDescripcion = $("<h2>")
+            .addClass("c-card__text")
+            .append(element.descripcion);
+        cardContenido.append(cardTitulo);
+        cardContenido.append(cardDescripcion);
 
-    let cardBoton = $("<div>")
-      .addClass("c-card__button")
-      .attr("id", "cat-" + element.id);
-    let linkBoton = $("<a>")
-      .addClass("c-card__link")
-      .append("Leer Más");
-    cardBoton.append(linkBoton);
+        let cardBoton = $("<div>")
+            .addClass("c-card__button")
+            .attr("id", "cat-" + element.id);
+        let linkBoton = $("<a>")
+            .addClass("c-card__link")
+            .append("Leer Más");
+        cardBoton.append(linkBoton);
 
-    setListenerCartasBoton(cardBoton);
+        setListenerCartasBoton(cardBoton);
 
-    componenteCard.append(cardImg);
-    componenteCard.append(cardContenido);
-    componenteCard.append(cardBoton);
+        componenteCard.append(cardImg);
+        componenteCard.append(cardContenido);
+        componenteCard.append(cardBoton);
 
-    areaColumna.append(componenteCard);
-    $("#cartas").append(areaColumna);
-  });
+        areaColumna.append(componenteCard);
+        $("#cartas").append(areaColumna);
+    });
 }
 
 function cargarAsistente() {
-  let lColumns = $("#l-columns-contenido");
-  let lColumnsArea = $("<div/>").addClass("l-columns__area");
-  let section = $("<div/>").addClass("c-section");
-  let sectionContent = $("<div/>").addClass("c-section__content");
-  let asistente = $("<div/>")
-    .addClass("c-asistente")
-    .attr("style", "background-image: url('./assets/img/fondo-asistente.jpg')");
-  let asistenteCabecera = $("<h2/>")
-    .addClass("c-asistente__cabecera")
-    .text("¿Necesitas ayuda?");
-  let cabeceraIcon = $("<i/>").addClass("far fa-comment-alt");
-  let asistenteTexto = $("<p/>")
-    .addClass("c-asistente__texto")
-    .text("Llámanos al 636 876 856 y te atenderemos personalmente.");
+    let lColumns = $("#l-columns-contenido");
+    let lColumnsArea = $("<div/>").addClass("l-columns__area");
+    let section = $("<div/>").addClass("c-section");
+    let sectionContent = $("<div/>").addClass("c-section__content");
+    let asistente = $("<div/>")
+        .addClass("c-asistente")
+        .attr("style", "background-image: url('./assets/img/fondo-asistente.jpg')");
+    let asistenteCabecera = $("<h2/>")
+        .addClass("c-asistente__cabecera")
+        .text("¿Necesitas ayuda?");
+    let cabeceraIcon = $("<i/>").addClass("far fa-comment-alt");
+    let asistenteTexto = $("<p/>")
+        .addClass("c-asistente__texto")
+        .text("Llámanos al 636 876 856 y te atenderemos personalmente.");
     let asistenteImagen = $('<img/>').addClass('c-asitente__imagen').attr({
-      'src': './assets/img/asistente.jpg',
-      'draggable': 'false'
-  });
-  let asistenteCerrar = $("<a/>").addClass("c-asistente__cerrar");
-  let cerrarIcon = $("<i/>").addClass("far fa-window-close");
+        'src': './assets/img/asistente.jpg',
+        'draggable': 'false'
+    });
+    let asistenteCerrar = $("<a/>").addClass("c-asistente__cerrar");
+    let cerrarIcon = $("<i/>").addClass("far fa-window-close");
 
-  asistenteCabecera.append(cabeceraIcon);
-  asistente.append(asistenteCabecera);
-  asistente.append(asistenteTexto);
-  asistente.append(asistenteImagen);
-  asistenteCerrar.append(cerrarIcon);
-  asistente.append(asistenteCerrar);
-  sectionContent.append(asistente);
-  section.append(sectionContent);
-  lColumnsArea.append(section);
-  lColumns.append(lColumnsArea);
+    asistenteCabecera.append(cabeceraIcon);
+    asistente.append(asistenteCabecera);
+    asistente.append(asistenteTexto);
+    asistente.append(asistenteImagen);
+    asistenteCerrar.append(cerrarIcon);
+    asistente.append(asistenteCerrar);
+    sectionContent.append(asistente);
+    section.append(sectionContent);
+    lColumnsArea.append(section);
+    lColumns.append(lColumnsArea);
 }
 
 function setListenerCartasBoton(cardBoton) {
-  cardBoton.on("click", function() {
-    // alert('En un sprint futuro podrás ver más información de: ' + $(this).attr('id'));
-    let idCategoria = $(this)
-      .attr("id")
-      .split("cat-");
-    mostrarServicios(idCategoria[1]);
-    //REVIEW - FALTA QUE CUANDO CARGUE LOS SERVICIOS VAYA ARRIBA DE LA PAGINA
-  });
-}
-
-function pintarItemsSidebar() {
-  $.each(categorias.data, function(index, categoria) {
-    // Creamos elemento del menú
-    let item = $("<div/>", {
-      class: "c-sidebar__item",
-      id: "cat-" + categoria.id,
-      text: categoria.nombre
+    cardBoton.on("click", function () {
+        // alert('En un sprint futuro podrás ver más información de: ' + $(this).attr('id'));
+        let idCategoria = $(this)
+            .attr("id")
+            .split("cat-");
+        mostrarServicios(idCategoria[1]);
+        //REVIEW - FALTA QUE CUANDO CARGUE LOS SERVICIOS VAYA ARRIBA DE LA PAGINA
     });
-    // Lo añadimos
-    $("#c-sidebar").append(item);
-  });
-
-  setListenersItemsSidebar();
 }
 
+/**
+ * Pinta las categorías del menú lateral
+ */
+function pintarItemsSidebar() {
+    $.each(categorias.data, function (index, categoria) {
+        // Creamos elemento del menú
+        let item = $("<div/>", {
+            class: "c-sidebar__item",
+            id: "cat-" + categoria.id,
+            text: categoria.nombre
+        });
+        // Lo añadimos
+        $("#c-sidebar").append(item);
+    });
+
+    setListenersItemsSidebar();
+}
+
+/**
+ * Establece los listeners de las categorías del menú lateral.
+ * Usa delegación de eventos para que afecte a los descendientes que pudieran crearse después
+ */
 function setListenersItemsSidebar() {
-  // Listener en el menú que afectará a todos los items (habidos y nuevos)
-  $("#c-sidebar").on("click", ".c-sidebar__item", function() {
-    $(".c-menu__option--selected").removeClass("c-menu__option--selected");
-    let idCategoria = this.id.split("-");
-    mostrarServicios(idCategoria[1]);
-  });
+    $("#c-sidebar").on("click", ".c-sidebar__item", function () {
+        $(".c-menu__option--selected").removeClass("c-menu__option--selected");
+        let idCategoria = this.id.split("-");
+        mostrarServicios(idCategoria[1]);
+    });
 }
 
 function obtenerCategoria(id) {
-  let nombre;
-    $.each(categorias.data, function(index, element) {
-        if (element.id == id){
-          nombre = element.nombre;
+    let nombre;
+    $.each(categorias.data, function (index, element) {
+        if (element.id == id) {
+            nombre = element.nombre;
         }
     });
     return nombre;
@@ -431,93 +436,93 @@ function obtenerCategoria(id) {
 
 function mostrarServicios(idCategoria) {
     let nombreCategoria = obtenerCategoria(idCategoria);
-  $.ajax({
-    url: BASEURL + "categoria/" + idCategoria + "/servicio",
-    dataType: "json",
-    type: "GET"
-  })
-    .done(response => {
-      $("#contenido").empty();
-      serviciosActuales = response.data;
-      let lColumns = $("<div/>").addClass("l-columns");
-      let lColumnsArea = $("<div/>").addClass("l-columns__area");
-      let section = $("<div/>").addClass(
-        "c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-s c-section--padding-horizontal-s@movil c-section--padding-vertical-l@movil"
-      );
-      let sectionTitle = $("<h1/>")
-        .addClass("c-section__title")
-        .text(nombreCategoria);
-      let sectionContent = $("<div/>").addClass("c-section__content");
-      let lColumnsInsideSection = $("<div/>")
-        .addClass("l-columns l-columns--3-columns l-columns--1-columns@movil")
-        .attr("id", "contenedor-articulos");
-      $.each(response.data, function(index, value) {
-        let lColumnsInsideSectionArea = $("<div/>").addClass("l-columns__area");
-        let articulo = $("<div/>").addClass("c-articulo").attr('draggable','true');
-        let articuloImg = $("<img/>")
-          .addClass("c-articulo__image")
-          .attr(
-            "src",
-            "http://localhost/api/storage/app/public/servicios/" + value.imagen
-          );
-        let articuloTitulo = $("<h3/>")
-          .addClass("c-articulo__title")
-          .text(value.nombre);
-        let articuloPrecio = $("<h6/>")
-          .addClass("c-articulo__price")
-          .text(value.precio + "€");
-        let articuloBoton = $("<a/>")
-          .addClass("c-articulo__button")
-          .text("Ver en detalle")
-          .attr({
-            id: "servicio-" + value.id,
-            "data-toggle": "modal",
-            "data-target": "#modalServicios"
-          });
-
-          articulo.on('dragstart', function(){
-            serviceDragged = parseInt($(this).find('.c-articulo__button').attr('id').split('-')[1]);
-          });
-
-        articulo.append(articuloImg);
-        articulo.append(articuloTitulo);
-        articulo.append(articuloPrecio);
-        articulo.append(articuloBoton);
-        lColumnsInsideSectionArea.append(articulo);
-        lColumnsInsideSection.append(lColumnsInsideSectionArea);
-      });
-
-      sectionContent.append(lColumnsInsideSection);
-      section.append(sectionTitle);
-      section.append(sectionContent);
-      lColumnsArea.append(section);
-      lColumns.append(lColumnsArea);
-      $("#contenido").append(lColumns);
-      addListenersServicios();
+    $.ajax({
+        url: BASEURL + "categoria/" + idCategoria + "/servicio",
+        dataType: "json",
+        type: "GET"
     })
-    .fail(response => {
-      $("#contenido").text("No se han encontrado servicios en esta categoría");
-    });
+        .done(response => {
+            $("#contenido").empty();
+            serviciosActuales = response.data;
+            let lColumns = $("<div/>").addClass("l-columns");
+            let lColumnsArea = $("<div/>").addClass("l-columns__area");
+            let section = $("<div/>").addClass(
+                "c-section c-section--light c-section--padding-vertical-xxl c-section--padding-horizontal-s c-section--padding-horizontal-s@movil c-section--padding-vertical-l@movil"
+            );
+            let sectionTitle = $("<h1/>")
+                .addClass("c-section__title")
+                .text(nombreCategoria);
+            let sectionContent = $("<div/>").addClass("c-section__content");
+            let lColumnsInsideSection = $("<div/>")
+                .addClass("l-columns l-columns--3-columns l-columns--1-columns@movil")
+                .attr("id", "contenedor-articulos");
+            $.each(response.data, function (index, value) {
+                let lColumnsInsideSectionArea = $("<div/>").addClass("l-columns__area");
+                let articulo = $("<div/>").addClass("c-articulo").attr('draggable', 'true');
+                let articuloImg = $("<img/>")
+                    .addClass("c-articulo__image")
+                    .attr(
+                        "src",
+                        "http://localhost/api/storage/app/public/servicios/" + value.imagen
+                    );
+                let articuloTitulo = $("<h3/>")
+                    .addClass("c-articulo__title")
+                    .text(value.nombre);
+                let articuloPrecio = $("<h6/>")
+                    .addClass("c-articulo__price")
+                    .text(value.precio + "€");
+                let articuloBoton = $("<a/>")
+                    .addClass("c-articulo__button")
+                    .text("Ver en detalle")
+                    .attr({
+                        id: "servicio-" + value.id,
+                        "data-toggle": "modal",
+                        "data-target": "#modalServicios"
+                    });
+
+                articulo.on('dragstart', function () {
+                    serviceDragged = parseInt($(this).find('.c-articulo__button').attr('id').split('-')[1]);
+                });
+
+                articulo.append(articuloImg);
+                articulo.append(articuloTitulo);
+                articulo.append(articuloPrecio);
+                articulo.append(articuloBoton);
+                lColumnsInsideSectionArea.append(articulo);
+                lColumnsInsideSection.append(lColumnsInsideSectionArea);
+            });
+
+            sectionContent.append(lColumnsInsideSection);
+            section.append(sectionTitle);
+            section.append(sectionContent);
+            lColumnsArea.append(section);
+            lColumns.append(lColumnsArea);
+            $("#contenido").append(lColumns);
+            addListenersServicios();
+        })
+        .fail(response => {
+            $("#contenido").text("No se han encontrado servicios en esta categoría");
+        });
 }
 
 function addListenersServicios() {
-  $(".c-articulo").on("click", ".c-articulo__button", function() {
-    let idServicio = $(this)
-      .attr("id")
-      .split("-")[1];
-    let servicio = $.grep(serviciosActuales, function(servicio) {
-      return servicio.id == idServicio;
-    })[0];
-    servicioSeleccionado = new Servicio(
-      servicio.id,
-      servicio.nombre,
-      servicio.categoria_id,
-      servicio.precio,
-      servicio.imagen,
-      servicio.descripcion
-    );
-    cargarModal(servicioSeleccionado);
-  });
+    $(".c-articulo").on("click", ".c-articulo__button", function () {
+        let idServicio = $(this)
+            .attr("id")
+            .split("-")[1];
+        let servicio = $.grep(serviciosActuales, function (servicio) {
+            return servicio.id == idServicio;
+        })[0];
+        servicioSeleccionado = new Servicio(
+            servicio.id,
+            servicio.nombre,
+            servicio.categoria_id,
+            servicio.precio,
+            servicio.imagen,
+            servicio.descripcion
+        );
+        cargarModal(servicioSeleccionado);
+    });
 }
 
 function cargarModal(servicio) {
@@ -541,15 +546,13 @@ function setListenerModalServicio() {
     $('#anyadir-carrito').on('click', function () {
         $("#modalServicios").modal("hide");
         // Si está logueado, añadimos al carrito. Si no, redirigimos a login
-        //TODO Ahora mismo redirige a registro, cuando adapten el modal de Login poner el del login
         if (localStorage.getItem("access_token") != null) {
             let micarrito = getLocalShoppingCart();
-            console.log("modalservicio; este esel carrito", micarrito);
             micarrito.addServicio(servicioSeleccionado);
-            guardarCarritoEnLocal(micarrito);
-            updateShoppingCartIcon(micarrito);
+            guardarCarrito(micarrito);
         } else {
-            showModal('registro');
+            alert("Debes iniciar sesión para poder comprar");
+            //showModal('modalLoginForm'); //REVIEW Bug modal: si no has pulsado antes no hace validación.
         }
     });
 }
@@ -558,88 +561,81 @@ function setListenerModalServicio() {
 
 
 function mostrarErrorDatos(json) {
-  console.log(
-    "ERROR al obtener los datos: " +
-      json.status +
-      "(" +
-      json.code +
-      "). Revisar si hay datos en la BBDD"
-  );
-  console.log("Más información: ", json);
+    console.log("ERROR al obtener los datos: " + json.status + "(" + json.code + "). Revisar si hay datos en la BBDD");
+    console.log("Más información: ", json);
 }
 
 function getImgCarrusel() {
-  var carrouselfather = $(".carousel-inner");
-  var numsliders = $(".carousel-indicators");
-  var contador = 1;
+    var carrouselfather = $(".carousel-inner");
+    var numsliders = $(".carousel-indicators");
+    var contador = 1;
 
-  $.each(imagenesCarrusel.data, function(index, elementoCarrusel) {
-    if (index == 0) {
-      numsliders.append(
-        '<li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>'
-      );
-      carrouselfather.append(
-        '<div class="carousel-item active">' +
-          "<img src='http://localhost/api/storage/app/public/carousel/" +
-          elementoCarrusel.imagen +
-          '\' class="d-block w-100">' +
-          '<div class="carousel-caption d-none d-md-block">' +
-          "<h5>" +
-          elementoCarrusel.titulo +
-          "</h5>" +
-          "<p>" +
-          elementoCarrusel.descripcion +
-          "</p>" +
-          " </div>" +
-          "</div>"
-      );
-    } else {
-      numsliders.append(
-        '<li data-target="#carouselExampleCaptions" data-slide-to="' +
-          contador +
-          '"></li>'
-      );
-      carrouselfather.append(
-        '<div class="carousel-item">' +
-          "<img src='http://localhost/api/storage/app/public/carousel/" +
-          elementoCarrusel.imagen +
-          '\' class="d-block w-100">' +
-          '<div class="carousel-caption d-none d-md-block">' +
-          " <h5>" +
-          elementoCarrusel.titulo +
-          "</h5> " +
-          "<p>" +
-          elementoCarrusel.descripcion +
-          "</p>" +
-          " </div>" +
-          "</div>"
-      );
-      contador = contador + 1;
-    }
-  });
+    $.each(imagenesCarrusel.data, function (index, elementoCarrusel) {
+        if (index == 0) {
+            numsliders.append(
+                '<li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>'
+            );
+            carrouselfather.append(
+                '<div class="carousel-item active">' +
+                "<img src='http://localhost/api/storage/app/public/carousel/" +
+                elementoCarrusel.imagen +
+                '\' class="d-block w-100">' +
+                '<div class="carousel-caption d-none d-md-block">' +
+                "<h5>" +
+                elementoCarrusel.titulo +
+                "</h5>" +
+                "<p>" +
+                elementoCarrusel.descripcion +
+                "</p>" +
+                " </div>" +
+                "</div>"
+            );
+        } else {
+            numsliders.append(
+                '<li data-target="#carouselExampleCaptions" data-slide-to="' +
+                contador +
+                '"></li>'
+            );
+            carrouselfather.append(
+                '<div class="carousel-item">' +
+                "<img src='http://localhost/api/storage/app/public/carousel/" +
+                elementoCarrusel.imagen +
+                '\' class="d-block w-100">' +
+                '<div class="carousel-caption d-none d-md-block">' +
+                " <h5>" +
+                elementoCarrusel.titulo +
+                "</h5> " +
+                "<p>" +
+                elementoCarrusel.descripcion +
+                "</p>" +
+                " </div>" +
+                "</div>"
+            );
+            contador = contador + 1;
+        }
+    });
 }
 
 function setListenersMenu() {
-  menu();
-  setListenersButtonsMenu();
+    menu();
+    setListenersButtonsMenu();
 }
 
 function setListenersButtonsMenu() {
-    $('#menu-shopping-cart').on('dragover', function(event){
+    $('#menu-shopping-cart').on('dragover', function (event) {
         event.preventDefault();
     });
 
-    $('#menu-shopping-cart').on('drop', function(){
+    $('#menu-shopping-cart').on('drop', function () {
         if (localStorage.getItem("access_token") != null) {
-            let servicioAnyadir = allServicios.find( servicio => {
-                if ( servicio.id === parseInt(serviceDragged) ) {
+            let servicioAnyadir = allServicios.find(servicio => {
+                if (servicio.id === parseInt(serviceDragged)) {
                     return new Servicio(servicio.id, servicio.nombre, servicio.categoria_id, servicio.precio, servicio.imagen, servicio.descripcion);
                 }
             });
             let carrito = getLocalShoppingCart();
             carrito.addServicio(servicioAnyadir);
-            guardarCarritoEnLocal(carrito);
-            updateShoppingCartIcon(carrito);
+            guardarCarrito(carrito);
         } else {
             alert('Debes iniciar sesión para poder comprar');
             // showModal('registro');
@@ -674,21 +670,21 @@ function setListenersButtonsMenu() {
             }
 
         } else if (id === 'menu-shopping-cart') {
-            pintarCarrito();
+            pintarCarritoEnSuCapa();
             showModal('modal-shopping-cart');
 
         } else if (id === 'iniciosesion') {
-            if($('#iniciosesion').text() === 'Inicio Sesión') {
+            if ($('#iniciosesion').text() === 'Inicio Sesión') {
                 showModal('modalLoginForm');
                 $('#formulario-login').on('keyup', 'input', function () {
 
-                    let inputValue = $(this).val();   
+                    let inputValue = $(this).val();
                     let inputType = $(this).attr('input-form');
                     let message = formValidator.validateInput(inputType, inputValue);
                     $(this).prev().prev().text(message);
 
                     $('#boton-loguear').attr('disabled', formValidator.getButtonStateLogin());
-                });              
+                });
             }
             else {
                 cambiarValoresMenu();
@@ -737,7 +733,7 @@ function registrarUsuario() {
             let image = 'harold.jpg';
             pintarMenuUser($('[input-form="INPUT_NAME"]').val(), response.user.image);
             guardarDatosUsuario(response);
-            obtenerCarritosUsuario();//ML
+            establecerCarritoActual();
         })
         .fail((response) => {
             console.log(response);
@@ -765,7 +761,7 @@ function cambiarValoresMenu() {
 function guardarDatosUsuario(tokenResponse) {
     // Guardamos datos del usuario en el localStorage y su ID en el carrito
     localStorage.setItem('datosUsuario', JSON.stringify(tokenResponse.user));
-    console.log("Guardado datos de usuario en localStorage: ", localStorage.getItem('datosUsuario'));
+    console.log("Guardado datos de usuario en localStorage: ", JSON.parse(localStorage.getItem('datosUsuario')));
 }
 
 // Exportar variables
