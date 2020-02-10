@@ -4,9 +4,9 @@ export class FormValidator {
         "INPUT_NAME" : /^[A-Za-z]+$/,
         "INPUT_EMAIL" : /^\S+@\S+\.\S+$/,
         "INPUT_DNI" : /^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]$/,
-        "INPUT_PASSWORD" : "",
-        "INPUT_PASSWORD1" : "",
-        "INPUT_PASSWORD2" : ""
+        "INPUT_PASSWORD" : /^[a-zA-Z0-9]{8,100}$/,
+        "INPUT_PASSWORD1" : /^[a-zA-Z0-9]{8,100}$/,
+        "INPUT_PASSWORD2" : /^[a-zA-Z0-9]{8,100}$/
     }
 
     name;
@@ -46,11 +46,12 @@ export class FormValidator {
                 this.dni = false;
             } else {
                 this.dni = true;
-            }
+            }     
         } else if ( inputType === 'INPUT_PASSWORD1' || inputType === 'INPUT_PASSWORD2' ) {
-            if ( this.regularExpressions.INPUT_PASSWORD1 === '' | this.regularExpressions.INPUT_PASSWORD2 === '' ) {
-                message = 'Debes escribir ambas contraseña';
-            } else if ( !(this.regularExpressions.INPUT_PASSWORD1 === this.regularExpressions.INPUT_PASSWORD2) ) {
+            if ( inputValue.length < 8 ){
+                message = "Contraseña de 8 caracteres mínimo";
+                this.passwords = false;
+            }else if ( !(this.regularExpressions.INPUT_PASSWORD1 === this.regularExpressions.INPUT_PASSWORD2) ) {
                 message = 'Las contraseñas no coinciden';
                 this.passwords = false;
             } else {
