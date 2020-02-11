@@ -137,10 +137,10 @@ $(function () {
 function defaultMenu() {
     let iniSesion = $('<i/>').addClass('c-menu__icon fas fa-sign-in-alt');
     $('#iniciosesion').append(iniSesion);
-    $('#iniciosesion').append(' Iniciar sesión');
+    $('#iniciosesion').append('Iniciar sesión');
     let regist = $('<i/>').addClass('c-menu__icon fas fa-user-plus');
     $('#register').append(regist);
-    $('#register').append(' Regístrate');
+    $('#register').append('Regístrate');
 }
 
 function cargarPaginaInicio() {
@@ -256,7 +256,7 @@ function pintarMenuUser(name, image) {
     btnLogin.removeAttr("data-toggle");
     btnLogin.removeAttr("data-target")
     btnRegister.html("Cerrar sesión");
-    btnRegister.attr("id", "logout")
+    btnRegister.attr("id", "logout");
     logoutSesion();
 }
 
@@ -665,8 +665,6 @@ function setListenersButtonsMenu() {
 
                     $('#boton-registrar').attr('disabled', formValidator.getButtonState());
                 });
-            } else {
-                cambiarValoresMenu();
             }
 
         } else if (id === 'menu-shopping-cart') {
@@ -674,7 +672,7 @@ function setListenersButtonsMenu() {
             showModal('modal-shopping-cart');
 
         } else if (id === 'iniciosesion') {
-            if ($('#iniciosesion').text() === 'Inicio Sesión') {
+            if ($('#iniciosesion').text() === 'Iniciar sesión') {
                 showModal('modalLoginForm');
                 $('#formulario-login').on('keyup', 'input', function () {
 
@@ -685,9 +683,6 @@ function setListenersButtonsMenu() {
 
                     $('#boton-loguear').attr('disabled', formValidator.getButtonStateLogin());
                 });
-            }
-            else {
-                cambiarValoresMenu();
             }
 
         }
@@ -743,16 +738,24 @@ function registrarUsuario() {
         });
 }
 
-function cambiarValoresMenu() {
-    if ($('#register').text() === 'Regístrate' && $('#iniciosesion').text() === 'Inicio Sesión') {
-        $('#iniciosesion').text('Nombre de usuario');
-        $('#register').text('Cerrar Sesión');
-    } else {
-        $('#iniciosesion').text('Inicio Sesión');
-        $('#register').text('Regístrate');
-    }
+// function cambiarValoresMenu() {
+//     console.log($('#logout').text() + '---' + $('#iniciosesion').text() );
 
-}
+
+//     if ($('#logout').text() !== 'Cerrar Sesión' && $('#iniciosesion').text() !== 'Inicio Sesión') {
+//       $('#iniciosesion').text('Inicio Sesión');
+//       $('#register').text('Regístrate');
+//     } 
+
+    // if ($('#register').text() === 'Regístrate' && $('#iniciosesion').text() === 'Inicio Sesión') {
+    //     $('#iniciosesion').text('Nombre de usuario');
+    //     $('#register').text('Cerrar Sesión');
+    // } else {
+    //     $('#iniciosesion').text('Inicio Sesión');
+    //     $('#register').text('Regístrate');
+    // }
+
+// }
 
 /**
  * Guarda los datos del usuario recibidos por el servidor en el localStorage, para acceder fácilmente a ellos.
