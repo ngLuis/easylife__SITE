@@ -71,8 +71,10 @@ $(function () {
             localStorage.setItem("access_token", miToken);
             let name = respuestaSesion['user']['name'];
             let image = respuestaSesion['user']['image'];
+            let type = respuestaSesion['user']['type'];
+            console.log(type);
             $('#modalLoginForm').removeClass('c-modal--show');
-            pintarMenuUser(name, image);
+            pintarMenuUser(name, image, type);
 
 
             guardarDatosUsuario(respuestaSesion);
@@ -135,6 +137,7 @@ $(function () {
 })
 
 function defaultMenu() {
+    console.log('Entra en default');
     let iniSesion = $('<i/>').addClass('c-menu__icon fas fa-sign-in-alt');
     $('#iniciosesion').append(iniSesion);
     $('#iniciosesion').append('Iniciar sesión');
@@ -238,7 +241,7 @@ function cargarCartasSection() {
     cargarCartas();
 }
 
-function pintarMenuUser(name, image) {
+function pintarMenuUser(name, image, type) {
     let modalAvatar = $("<a>"); // queda pendiente añadir modal (sam)
     let divImgAvatar = $("<img>");
     modalAvatar.addClass("c-menu__option c-menu__option--caja-image c-menu__option--padding-none c-menu__option--padding-none@movil c-menu__option--margin-none");
@@ -256,7 +259,18 @@ function pintarMenuUser(name, image) {
     btnLogin.removeAttr("data-toggle");
     btnLogin.removeAttr("data-target")
     btnRegister.html("Cerrar sesión");
-    btnRegister.attr("id", "logout");
+    btnRegister.attr("id", "logout")
+
+    console.log(type === '1');
+
+    console.log(type);
+
+    if ( type === '1' ) {
+      let admin = $('<i/>').addClass('c-menu__icon fas fa-user-cog');
+      $('#administracion').attr('href','http://localhost:4200');
+      $('#administracion').append(admin);
+      $('#administracion').append(' Admin');
+    }
     logoutSesion();
 }
 
@@ -268,9 +282,8 @@ function refreshMenu() {
         type: 'POST',
         dataType: 'json',
     }).done(function (response) {
-        pintarMenuUser(response.name, response.image);
+        pintarMenuUser(response.name, response.image, response.type);
         establecerCarritoActual();
-
     }).fail(function (response) {
         console.log("Token - Error de autenticación con el token de localStorage. Posiblemente haya caducado");
         console.log("Token - Más información: ", response);
@@ -722,7 +735,6 @@ function registrarUsuario() {
         contentType: false,
     })
         .done((response) => {
-            console.log(response);
             localStorage.setItem('access_token', response.access_token);
             $(this).parent().parent().parent().parent().removeClass('c-modal--show');
             let image = 'harold.jpg';
