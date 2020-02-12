@@ -8,6 +8,9 @@
         display: flex;
         padding: 20px 30px;
         border-bottom: 1px dashed $texto;
+        @media (max-width: 500px) {
+            padding: 20px 5px 20px 0px;
+        }
 
         @if $debug {
             border: 1px solid red;
@@ -62,7 +65,12 @@
             outline: none; // outline: borde al hacer click
         }
     }
+
+    &__warning{
+        text-align: center;
+    }
 }
+
 
 /**
  * Icono del carrito del top-menu

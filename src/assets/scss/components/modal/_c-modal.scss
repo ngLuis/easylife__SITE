@@ -49,7 +49,12 @@
         &--large{
             left: 20%;
             width: 60%;
-            min-width: 750px;
+            max-width: 800px;
+            @media (max-width: 500px) {
+                left: 0;
+                width: 100%;
+                max-width: 800px;  
+            }
         }
 
         &--fast{
@@ -66,7 +71,7 @@
     &__content {
         padding: 15px 90px;
         @media (max-width: 500px) {
-            padding: 15px 30px;
+            padding: 15px 0px;
         }
     }
 
@@ -104,10 +109,10 @@
         }
     }
 
-    &-bootstrap__image{
+    &-bootstrap__img{
         @media (max-width: 500px) {
-            width: 300px;
-            margin-left: 15px;
+            width: 300px !important;
+            margin-left: 15px !important;
         }
     }
 }
