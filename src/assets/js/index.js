@@ -265,14 +265,131 @@ function pintarMenuUser(name, image, type) {
 
     console.log(type);
 
-    if ( type === '1' ) {
-      let admin = $('<i/>').addClass('c-menu__icon fas fa-user-cog');
-      $('#administracion').attr('href','http://localhost:4200');
-      $('#administracion').append(admin);
-      $('#administracion').append(' Admin');
+    if (type === '1') {
+        let admin = $('<i/>').addClass('c-menu__icon fas fa-user-cog');
+        $('#administracion').attr('href', 'http://localhost:4200');
+        $('#administracion').append(admin);
+        $('#administracion').append(' Admin');
     }
+    habilitarPanelUser();
     logoutSesion();
 }
+
+function habilitarPanelUser() {
+    // no funciona del todo bien
+    btnLogin.on("click", function () {
+        /*   btnLogin.removeAttr("id", "none"); */
+        /*   btnLogin = ""; */
+        let contenido = $("#contenido");
+
+        contenido.empty();
+        paintPanelUser();
+
+        cargarChangePanel()
+        let panelUser = $("#panel-user");
+        /*  contenido.append(panelUser); */
+        panelUser.removeClass("g--display-none");
+        let datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
+        let idUser = datosUsuario.id;
+        let avatarName = datosUsuario.image;
+        let linkAvatar = $("#actualizarAvatar");
+        linkAvatar.attr("src",
+            "http://localhost/api/storage/app/public/avatars/" + datosUsuario.image);
+
+        $.ajax({
+            url: BASEURL + "user/" + idUser + "/carrito/estado/1",
+            type: "GET",
+            datatype: "json"
+        }).done(function (respuestaCarro) {
+            console.log("carroCompleto", respuestaCarro);
+            printHistorial(respuestaCarro);
+        }).fail(function (xhr) {
+            console.log("No se ha encontrado el usuario o todavía no tiene compras registradas", xhr)
+        })
+
+    })
+}
+
+function paintPanelUser() {
+    let contenido = $("#contenido");
+    let html = "";
+    html += '<div id="panel-user" class="l-pagina-panel-control-usuario g--display-none">';
+    html += '   <div class="l-pagina-panel-control-usuario__right">';
+    html += '       <div class="c-panel">';
+    html += '           <div class="c-panel__title">Actualiza tus datos</div>';
+    html += '           <div class="c-panel__content">';
+    html += '               <form class="c-form" id="formulario-actualizacion" name="form-actualizacion" enctype="multipart/form-data">';
+    html += '                   <input class="c-form__input" input-form="INPUT_EMAIL_ACT"  id="userMailPanel" type="text" placeholder="Email"/>';
+    html += '                   <input class="c-form__input" input-form="INPUT_NAME_ACT" id="userNamePanel" type="text" placeholder="Nombre"/>';
+    html += '                   <input class="c-form__input" input-form="INPUT_PASSWORD1_ACT" id="userPassPanel" type="password" placeholder="Introduce nueva contraseña"/>';
+    html += '                   <input class="c-form__input" input-form="INPUT_PASSWORD2_ACT" id="userPassPanelRepeat" type="password" placeholder="Repite Contraseña"/>';
+    html += '                   <input class="c-form__input" input-form="INPUT_DNI_ACT" id="userDNIPanel" type="text" placeholder="DNI"/>';
+    html += '                   <input class="c-form__input" input-form="INPUT_TELEPHONE_ACT" id="userTelefonoPanel" type="text" placeholder="Teléfono"/>';
+    html += '                   <input class="c-form__input" input-form="INPUT_DIRECTION_ACT" id="userDireccionPanel" type="text" placeholder="Dirección"/>';
+    html += '                   <button class="c-form__button" id="boton-actualizar" type="button">Modificar</button>';
+    html += '               </form>';
+    html += '           </div>';
+    html += '       </div>';
+    html += '   </div>';
+
+    html += '   <div class="l-pagina-panel-control-usuario__left">';
+    html += '       <div class="c-updatable-foto">';
+    html += '           <div class="c-updatable-foto__title"> Avatar </div>';
+    html += '               <img id="actualizarAvatar" class="c-updatable-foto__img">';
+    html += '           <div class="c-updatable-foto__footer">';
+    html += '           </div>';
+    html += '       </div>';
+    html += '   </div>';
+
+    html += '   <div class="l-pagina-panel-control-usuario__footer">';
+    html += '       <div class="c-panel">';
+    html += '           <div class="c-panel__title"> Historial de compras </div>';
+    html += '           <div class="c-panel__content">';
+    html += '                   <table class="c-panel__table">';
+    html += '                       <thead class="c-panel__table--head">';
+    html += '                           <tr>';
+    html += '                               <th>Servicio adquirido</th>';
+    html += '                               <th> Cantidad </th>';
+    html += '                               <th> Precio total </th>';
+    html += '                           </tr>';
+    html += '                       </thead>';
+    html += '                                                           <hr>';
+    html += '                       <tbody id="datosHistorial">';
+    html += '                       </tbody>';
+    html += '                   </table>';
+    html += '           </div>';
+    html += '       </div>';
+    html += '   </div>';
+    html += '</div>';
+
+    contenido.append(html)
+}
+
+function printHistorial(respuestaCarro) {
+
+    let datosHistorial = $("#datosHistorial");
+    let tr = $("<tr>");
+    datosHistorial.append(tr);
+    tr.append("<td id='serviciosComprados'");
+    tr.append("<td id='unidadesTotales'");
+    tr.append("<td id='precioTotalServicio'");
+
+    respuestaCarro.data.map(elemento => {
+        let servComp = $("#serviciosComprados");
+        let precioComp = $("#precioTotalServicio");
+        let unitComp = $("#unidadesTotales");
+        let nombreServ = elemento.nombre;
+        let precioServ = elemento.precio;
+        let unidadesServ = elemento.unidades;
+        let cantidadSumada = parseInt(precioServ) * parseInt(unidadesServ);
+        unitComp.append(unidadesServ + "<br>")
+        servComp.append(nombreServ + "<br>");
+        precioComp.append(cantidadSumada + " €" + "<br>");
+
+    })
+
+}
+
 
 function refreshMenu() {
     let miTokenStorage = localStorage.getItem("access_token");
@@ -717,6 +834,76 @@ function setListenersModalElements() {
 }
 
 
+function cargarChangePanel() {
+
+
+    let actualizarDatosUser = $("#boton-actualizar");
+
+    actualizarDatosUser.on("click", function () {
+        let data;
+        let datosUsuario = JSON.parse(localStorage.getItem("datosUsuario"));
+        let idUser = datosUsuario.id;
+        console.log(idUser);
+        console.log(idUser);
+        let email = $("#userMailPanel").val();
+        let name = $("#userNamePanel").val();
+        let direccion = $("#userDireccionPanel").val();
+        let telefono = $("#userTelefonoPanel").val();
+        let pass = $("#userPassPanel").val();
+        let pass2 = $("#userPassPanelRepeat").val();
+        let dni = $("#userDNIPanel").val();
+        console.log(pass);
+        console.timeLog(pass2)
+        if (pass == pass2) {
+            $.ajax({
+                url: BASEURL + "userpanel/" + idUser,
+                type: "PATCH",
+                dataType: "json",
+                data: {
+                    "email": email,
+                    "name": name,
+                    "password": pass,
+                    "dni": dni,
+                    "direccion": direccion,
+                    "telefono": telefono
+                },
+            }).done(function (data) {
+
+                alert("Datos actualizados correctamente, por favor vuelva a iniciar sesión con los nuevos datos")
+
+                directLogoutSesion();
+
+            }).fail(function (xhr) {
+                console.log("Ha ocurrido el siguiente error", xhr)
+            })
+        } else {
+            alert("Las contraseñas no coinciden");
+        }
+
+
+
+    })
+}
+
+function directLogoutSesion() {
+
+    let miTokenStorage = localStorage.getItem("access_token");
+    $.ajax({
+        url: BASEURL + 'auth/logout?token=' + miTokenStorage,
+        type: 'POST',
+        dataType: 'json',
+    }).done(function (respuestaLogout) {
+        alert("Sesión cerrada correctamente");
+        localStorage.clear();
+        var url = "http://localhost/site";
+        $(location).attr('href', url);
+        // cargarPaginaInicio();
+    }).fail(function () {
+        console.log("Algo ha fallado");
+    })
+
+}
+
 function registrarUsuario() {
     const userForm = new FormData();
     userForm.append("name", $('[input-form="INPUT_NAME"]').val());
@@ -759,13 +946,13 @@ function registrarUsuario() {
 //       $('#register').text('Regístrate');
 //     } 
 
-    // if ($('#register').text() === 'Regístrate' && $('#iniciosesion').text() === 'Inicio Sesión') {
-    //     $('#iniciosesion').text('Nombre de usuario');
-    //     $('#register').text('Cerrar Sesión');
-    // } else {
-    //     $('#iniciosesion').text('Inicio Sesión');
-    //     $('#register').text('Regístrate');
-    // }
+// if ($('#register').text() === 'Regístrate' && $('#iniciosesion').text() === 'Inicio Sesión') {
+//     $('#iniciosesion').text('Nombre de usuario');
+//     $('#register').text('Cerrar Sesión');
+// } else {
+//     $('#iniciosesion').text('Inicio Sesión');
+//     $('#register').text('Regístrate');
+// }
 
 // }
 

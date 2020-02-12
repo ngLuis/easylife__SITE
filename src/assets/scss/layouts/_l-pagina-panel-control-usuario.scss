@@ -1,0 +1,34 @@
+.l-pagina-panel-control-usuario{
+
+    display: grid;
+    grid-template-areas: "left right"
+                         "footer footer";
+    grid-template-columns: 1fr minmax(1.5fr,300px);
+
+    @media (max-width:600px){
+        grid-template-areas: "right"
+                            "footer";
+    }
+
+    &__left{
+        grid-area: left;
+
+        @media (max-width: 600px){
+            display: none;
+        }
+    }
+
+    &__right{
+        grid-area: right;
+
+    }
+
+    &__footer{
+        grid-area: footer;
+
+
+    }
+
+
+}
+

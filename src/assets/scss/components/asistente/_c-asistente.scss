@@ -52,16 +52,21 @@
     color: #740a16;
     cursor: pointer;
   }
+
   &--mostrar {
+
     visibility: visible;
     animation-name: mover;
     animation-duration: 3s;
+
     @media (max-width: 500px) {
       &\@movil {
         visibility: hidden;
       }
     }
+    
   }
+
 }
 
 // @media (max-width: 500px) {

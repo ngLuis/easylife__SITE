@@ -1,0 +1,21 @@
+.c-updatable-foto{
+ 
+    margin-top: 50px;
+    text-align: center;
+    &__title{
+        padding: 10px;
+        margin: 10px;
+        font-weight: bold;
+        text-align: center;
+    }
+    &__img{
+        padding: 20px;
+        margin: 20px;
+        border: 1px solid #26BDE8;
+        border-radius:5px;
+        width: 250px;
+        height: 250px;
+        box-shadow: 1px 1px 6px 3px  #26BDE8;
+    }
+
+}

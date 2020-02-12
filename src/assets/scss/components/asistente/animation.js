@@ -12,7 +12,7 @@ function informacion() {
 
 function volver() {
     $(".c-asistente__cerrar").on("click", function () {
-        $(".c-asistente").removeClass("c-asistente--mostrar");
+        $(".c-asistente").removeClass("c-asistente--mostrar c-asistente--mostrar@movil");
 
 
     })

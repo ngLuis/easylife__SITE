@@ -8,6 +8,11 @@
         width: 100%;
         margin-bottom: 15px;
 
+        &--panel-user{
+            padding: 5px;
+            margin: 5px;
+        }
+
         &::placeholder {
             padding-left: 10px;
         }
@@ -26,6 +31,21 @@
         display: inline-block;
         text-align: center;
 
+
+        &--historial{
+            padding: 5px;
+            color: white !important;
+            background-color: $color-destacado;
+            border-radius: 5px;
+            display: inline-block;
+            text-align: center;
+
+            &:hover {
+                background-color: darken($color-destacado, 10%);
+                cursor: pointer;
+            }
+        }
+        
         &:hover {
             background-color: darken($color-destacado, 10%);
             cursor: pointer;
